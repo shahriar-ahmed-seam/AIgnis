@@ -91,6 +91,21 @@ export default function App() {
     return () => window.removeEventListener("pointerdown", prime);
   }, []);
 
+  // Public /docs route: anyone hitting {app}/docs sees the docs page directly
+  // (its own access gate decides visibility). This is the judge/investor link.
+  const isDocsPath =
+    typeof window !== "undefined" && window.location.pathname.replace(/\/$/, "") === "/docs";
+  if (isDocsPath) {
+    return (
+      <>
+        <Backdrop />
+        <div className="relative z-10 h-screen">
+          <DocsView />
+        </div>
+      </>
+    );
+  }
+
   const authed = status === "authenticated";
   const active = authed ? "app" : screen; // "welcome" | "auth" | "app"
 

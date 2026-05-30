@@ -165,8 +165,7 @@ We followed a spec-driven AI-DLC in Kiro. Phase 1: a Requirements spec (EARS-for
 
 ## Build a Live /docs Module
 Tick: ✅ "Yes — we will run the /docs module prompt and ship a live documentation page"
-(DONE — a live /docs page is built into the app: pitch + architecture + system
-dashboard in one scrollable route, reachable from the sidebar under Manage → Live Docs.)
+(Recommended — it's free points and we can build a /docs route that doubles as the pitch/architecture page. Tell me and I'll build it in the frontend.)
 
 ---
 

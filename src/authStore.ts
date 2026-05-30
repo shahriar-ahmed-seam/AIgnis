@@ -18,9 +18,16 @@ export interface User {
   email: string;
   plan: "Starter" | "Pro" | "Agency";
   avatarSeed: string; // used to generate a deterministic gradient avatar
+  isAdmin: boolean;
 }
 
 type AuthStatus = "anonymous" | "authenticated";
+
+// Emails that get admin / super-admin rights (docs visibility + scheduling).
+const ADMIN_EMAILS = ["shahriarseam17@gmail.com"];
+function computeIsAdmin(email: string): boolean {
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
+}
 
 interface AuthStore {
   status: AuthStatus;
@@ -72,6 +79,7 @@ export const useAuth = create<AuthStore>((set) => ({
       email,
       plan: "Pro",
       avatarSeed: email,
+      isAdmin: computeIsAdmin(email),
     };
     saveUser(user);
     play("success");
@@ -83,7 +91,7 @@ export const useAuth = create<AuthStore>((set) => ({
     if (name.trim().length < 2) return { ok: false, error: "Tell us your name." };
     if (!emailRe.test(email)) return { ok: false, error: "Enter a valid email address." };
     if (password.length < 6) return { ok: false, error: "Password must be at least 6 characters." };
-    const user: User = { id: uid(), name: name.trim(), email, plan: "Starter", avatarSeed: email };
+    const user: User = { id: uid(), name: name.trim(), email, plan: "Starter", avatarSeed: email, isAdmin: computeIsAdmin(email) };
     saveUser(user);
     play("success");
     set({ status: "authenticated", user });
@@ -94,9 +102,10 @@ export const useAuth = create<AuthStore>((set) => ({
     const user: User = {
       id: uid(),
       name: "Guest",
-      email: "guest@ainigma.ai",
+      email: "guest@aignis.ai",
       plan: "Starter",
       avatarSeed: `guest-${Date.now()}`,
+      isAdmin: false,
     };
     saveUser(user);
     play("tick");
