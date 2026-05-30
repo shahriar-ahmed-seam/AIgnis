@@ -7,5 +7,5 @@ Drop generated PNGs here using these exact names:
 - `ai-fitness.png`
 - `default.png`
 
-See `../../ASSET_PROMPTS.md` for the generation prompts. Until files exist,
+See `../../docs/development/ASSET_PROMPTS.md` for the generation prompts. Until files exist,
 the UI shows polished CSS gradient placeholders automatically.

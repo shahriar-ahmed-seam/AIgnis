@@ -31,5 +31,8 @@ server/tmp-*.json
 .DS_Store
 Thumbs.db
 
+# Local screenshots / scratch reference (not project code)
+image/
+
 # Submission form PDFs (reference material, not project code)
 *.pdf
