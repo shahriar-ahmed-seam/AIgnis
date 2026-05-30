@@ -17,6 +17,7 @@ const ITEMS: NavItem[] = [
   { id: "observability", label: "LLMOps", glyph: "◎", group: "Intelligence" },
   { id: "workspace", label: "Brand Workspace", glyph: "⬡", group: "Manage" },
   { id: "pricing", label: "Plans & Billing", glyph: "◆", group: "Manage" },
+  { id: "docs", label: "Live Docs", glyph: "❑", group: "Manage" },
 ];
 
 const GROUPS = ["Create", "Intelligence", "Manage"];

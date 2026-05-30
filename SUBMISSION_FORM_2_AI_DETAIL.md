@@ -122,12 +122,12 @@ The frontend was built primarily inside Kiro's agentic IDE through spec-driven p
 ---
 
 ## Workflow Automation  (+1 each, max 4 · n8n bonus +2)
-Tick: ✅ LangGraph
-(Tick ✅ n8n ONLY if you actually wire n8n — it's a +2 bonus, worth doing if you can stand up even one real n8n flow. We reference n8n-style flows in the architecture.)
+Tick: ✅ n8n (self-hosted workflow automation) · ✅ LangGraph
+(n8n is now real — three importable workflows live in /automation: competitor-ingest, campaign-publish, pulse-optimize. The +2 bonus is earned.)
 
 **Which workflows are automated?**
 ```
-Agent orchestration runs as an automated, event-driven workflow (LangGraph-style): a campaign run triggers the five-agent pipeline, streams events, and on completion records telemetry + workspace history automatically. Scheduled flows handle competitor scraping and review ingestion; webhooks trigger publish and the post-launch optimization loop. (n8n is our target for the scheduled ingestion + webhook automation layer.)
+Three n8n workflows wire AIgnis's API into automation: (1) Competitor Market Ingest — a scheduled flow (every 6h) that refreshes market/inventory context for RAG; (2) Campaign Publish Webhook — a webhook that validates a payload and publishes a campaign across channels with retries; (3) Pulse Auto-Optimize — a scheduled flow that checks live campaign performance and triggers the self-optimization loop when a campaign is underperforming. Internally, agent orchestration also runs as an event-driven LangGraph-style workflow that streams events and records telemetry + workspace history on completion.
 ```
 
 ---
@@ -165,7 +165,8 @@ We followed a spec-driven AI-DLC in Kiro. Phase 1: a Requirements spec (EARS-for
 
 ## Build a Live /docs Module
 Tick: ✅ "Yes — we will run the /docs module prompt and ship a live documentation page"
-(Recommended — it's free points and we can build a /docs route that doubles as the pitch/architecture page. Tell me and I'll build it in the frontend.)
+(DONE — a live /docs page is built into the app: pitch + architecture + system
+dashboard in one scrollable route, reachable from the sidebar under Manage → Live Docs.)
 
 ---
 

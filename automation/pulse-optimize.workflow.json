@@ -1,0 +1,73 @@
+{
+  "name": "AIgnis — Pulse Auto-Optimize Loop",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Every 2 hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.AIGNIS_API || 'http://localhost:8787' }}/pulse/{{ $env.AIGNIS_CAMPAIGN_ID || 'demo-campaign' }}?presetId=eco-sneakers",
+        "options": {}
+      },
+      "id": "get-pulse",
+      "name": "Get campaign pulse",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.optimized }}",
+              "rightValue": false,
+              "operator": { "type": "boolean", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "id": "needs-opt",
+      "name": "Not yet optimized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AIGNIS_API || 'http://localhost:8787' }}/pulse/{{ $env.AIGNIS_CAMPAIGN_ID || 'demo-campaign' }}/optimize",
+        "options": {}
+      },
+      "id": "optimize",
+      "name": "Run optimization loop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 220]
+    }
+  ],
+  "connections": {
+    "Every 2 hours": { "main": [[{ "node": "Get campaign pulse", "type": "main", "index": 0 }]] },
+    "Get campaign pulse": { "main": [[{ "node": "Not yet optimized?", "type": "main", "index": 0 }]] },
+    "Not yet optimized?": { "main": [[{ "node": "Run optimization loop", "type": "main", "index": 0 }], []] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "AIgnis" }]
+}

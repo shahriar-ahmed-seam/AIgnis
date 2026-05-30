@@ -10,7 +10,8 @@ export type Section =
   | "observability"
   | "workspace"
   | "published"
-  | "pricing";
+  | "pricing"
+  | "docs";
 
 interface NavStore {
   section: Section;

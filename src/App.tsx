@@ -13,6 +13,7 @@ import { ObservabilityView } from "./views/ObservabilityView";
 import { WorkspaceView } from "./views/WorkspaceView";
 import { PublishedView } from "./views/PublishedView";
 import { PricingView } from "./views/PricingView";
+import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
 import { usePipeline } from "./store";
@@ -73,6 +74,7 @@ function PlatformApp() {
           {section === "workspace" && <WorkspaceView />}
           {section === "published" && <PublishedView />}
           {section === "pricing" && <PricingView />}
+          {section === "docs" && <DocsView />}
         </motion.div>
       </AnimatePresence>
     </AppShell>
