@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { ALL_SOURCES, makeEvent, SOURCE_INFO } from "../streams/streamSource.js";
+import { ALL_SOURCES, makeEvent, SOURCE_INFO } from "../services/streamSource.js";
 
 /**
  * Live Data Streams endpoints.

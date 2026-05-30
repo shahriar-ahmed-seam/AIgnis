@@ -14,7 +14,7 @@ import { streamRoutes } from "./routes/streams.js";
 import { pulseRoutes } from "./routes/pulse.js";
 import { publishRoutes } from "./routes/publish.js";
 import { workspaceRoutes } from "./routes/workspace.js";
-import { startRunGc } from "./pipeline/orchestrator.js";
+import { startRunGc } from "./services/orchestrator.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const GENERATED_DIR = join(__dirname, "..", "generated");

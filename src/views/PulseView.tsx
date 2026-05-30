@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { usePipeline } from "../store";
-import { ModeIndicator } from "../components/ModeIndicator";
-import { ChannelIcon } from "../components/ChannelIcon";
-import { CountUp } from "../components/CountUp";
-import { Sparkline } from "../components/Sparkline";
+import { usePipeline } from "../stores/pipelineStore";
+import { ModeIndicator } from "../components/ui/ModeIndicator";
+import { ChannelIcon } from "../components/ui/ChannelIcon";
+import { CountUp } from "../components/ui/CountUp";
+import { Sparkline } from "../components/ui/Sparkline";
 import type { ChannelPulse } from "../types";
 import { AGENT_META } from "../types";
 

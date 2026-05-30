@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePipeline } from "../store";
-import { HeroImage } from "../components/HeroImage";
-import { TypedText } from "../components/TypedText";
-import { AnalyticsDashboard } from "../components/AnalyticsDashboard";
-import { ModeIndicator } from "../components/ModeIndicator";
+import { usePipeline } from "../stores/pipelineStore";
+import { HeroImage } from "../components/features/HeroImage";
+import { TypedText } from "../components/ui/TypedText";
+import { AnalyticsDashboard } from "../components/features/AnalyticsDashboard";
+import { ModeIndicator } from "../components/ui/ModeIndicator";
 
 /**
  * Creative Renderer — the payoff (Req 4). Left: the finished ad creative

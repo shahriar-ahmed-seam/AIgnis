@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { getGraph, neighbors, traverse, applicableRules } from "../graph/graph.js";
+import { getGraph, neighbors, traverse, applicableRules } from "../services/graph.js";
 
 /**
  * GraphRAG endpoints over the brand knowledge graph.

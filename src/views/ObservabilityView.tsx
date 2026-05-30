@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { SectionHeader } from "./GraphView";
-import { CountUp } from "../components/CountUp";
+import { CountUp } from "../components/ui/CountUp";
 
 /**
  * LLMOps Observability — makes the model layer feel like a real ML platform:

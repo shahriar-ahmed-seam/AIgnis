@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { usePipeline } from "../store";
+import { usePipeline } from "../stores/pipelineStore";
 import { PRESETS } from "../data/datasets";
 import { play, primeAudio } from "../lib/sound";
 import { VoiceInput, isSpeechInputSupported } from "../lib/speech";

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { getWorkspace, addHistory, addLearning, updateProfile } from "../workspace/workspace.js";
+import { getWorkspace, addHistory, addLearning, updateProfile } from "../services/workspace.js";
 
 /**
  * Brand Workspace endpoints — persistent brand memory.

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { ImageGenerator, ImageRef } from "../types.js";
 import { config } from "../config.js";
 import { fetchWithTimeout } from "../lib/fallback.js";
-import { recordCall } from "../telemetry/telemetry.js";
+import { recordCall } from "../services/telemetry.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Generated images are written here and served statically at /generated/*

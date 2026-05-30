@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "./GraphView";
-import { usePublish, channelHandle } from "../publishStore";
-import { useNav } from "../navStore";
-import { ChannelIcon } from "../components/ChannelIcon";
-import { HeroImage } from "../components/HeroImage";
+import { usePublish, channelHandle } from "../stores/publishStore";
+import { useNav } from "../stores/navStore";
+import { ChannelIcon } from "../components/ui/ChannelIcon";
+import { HeroImage } from "../components/features/HeroImage";
 import { play } from "../lib/sound";
 
 const CHANNEL_NAME: Record<string, string> = {

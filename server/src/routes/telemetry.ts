@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { snapshot, COST_TABLE } from "../telemetry/telemetry.js";
+import { snapshot, COST_TABLE } from "../services/telemetry.js";
 
 /**
  * LLMOps observability endpoints. Returns REAL metered metrics from actual

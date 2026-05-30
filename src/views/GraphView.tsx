@@ -6,7 +6,7 @@ import {
   NODE_STYLE,
   type GraphNode,
 } from "../data/graphData";
-import { ModeIndicator } from "../components/ModeIndicator";
+import { ModeIndicator } from "../components/ui/ModeIndicator";
 import { play } from "../lib/sound";
 
 /**

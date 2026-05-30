@@ -5,7 +5,7 @@ import {
   getRun,
   startRun,
   subscribe,
-} from "../pipeline/orchestrator.js";
+} from "../services/orchestrator.js";
 import { PRESETS, DEFAULT_DATASET } from "../data/datasets.js";
 
 const runBodySchema = z.object({

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wordmark } from "../components/BrandMark";
-import { useAuth } from "../authStore";
-import { useScreen } from "../screenStore";
+import { Wordmark } from "../components/layout/BrandMark";
+import { useAuth } from "../stores/authStore";
+import { useScreen } from "../stores/screenStore";
 import { play, primeAudio } from "../lib/sound";
 
 /**

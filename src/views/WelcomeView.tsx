@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Wordmark } from "../components/BrandMark";
-import { useScreen } from "../screenStore";
+import { Wordmark } from "../components/layout/BrandMark";
+import { useScreen } from "../stores/screenStore";
 import { play, primeAudio } from "../lib/sound";
 
 /**

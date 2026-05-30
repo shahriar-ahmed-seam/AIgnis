@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { getPulse, optimizePulse } from "../pulse/pulse.js";
+import { getPulse, optimizePulse } from "../services/pulse.js";
 
 /**
  * Campaign Pulse + optimization-loop endpoints.

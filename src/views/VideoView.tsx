@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { usePipeline } from "../store";
-import { usePublish } from "../publishStore";
-import { useNav } from "../navStore";
-import { VideoReel } from "../components/VideoReel";
-import { ChannelIcon } from "../components/ChannelIcon";
-import { ModeIndicator } from "../components/ModeIndicator";
+import { usePipeline } from "../stores/pipelineStore";
+import { usePublish } from "../stores/publishStore";
+import { useNav } from "../stores/navStore";
+import { VideoReel } from "../components/features/VideoReel";
+import { ChannelIcon } from "../components/ui/ChannelIcon";
+import { ModeIndicator } from "../components/ui/ModeIndicator";
 import { REEL_SPECS, type ChannelId } from "../types";
 import { speak, stopSpeaking, isSpeechOutputSupported } from "../lib/speech";
 import { play } from "../lib/sound";

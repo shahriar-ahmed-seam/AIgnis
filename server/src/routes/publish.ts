@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { publishCampaign, listPosts, clearPosts, type ChannelId } from "../publish/publish.js";
+import { publishCampaign, listPosts, clearPosts, type ChannelId } from "../services/publish.js";
 
 /**
  * Publishing + Published gallery endpoints.

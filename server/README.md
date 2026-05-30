@@ -153,20 +153,13 @@ src/
     copy.ts           LLM copy: Groq | OpenRouter | Ollama + Mock (telemetry-instrumented)
     image.ts          Diffusion: Pollinations | HuggingFace + Mock (telemetry-instrumented)
     inventory.ts      File-based + Mock inventory providers
-  pipeline/
+  services/           domain logic
     orchestrator.ts   simulated swarm: schedules events, SSE pub/sub, finalize()
-                      (records telemetry route + workspace history on completion)
-  telemetry/
     telemetry.ts      LLMOps recorder: latency/tokens/cost/cache + cost table
-  graph/
     graph.ts          GraphRAG brand knowledge graph + BFS traversal + rule gate
-  streams/
     streamSource.ts   live ingestion event generators (CDC/scraper/reviews/social)
-  pulse/
     pulse.ts          campaign post-launch performance + optimization loop
-  publish/
     publish.ts        publish to channels (simulated) + Published gallery
-  workspace/
     workspace.ts      persistent brand memory (profile, learnings, history)
   routes/
     pipeline.ts  live.ts  inventory.ts  telemetry.ts

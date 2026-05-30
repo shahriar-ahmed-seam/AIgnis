@@ -1,7 +1,7 @@
 import type { CopyGenerator, InventoryRecord, MarketingCopy } from "../types.js";
 import { config } from "../config.js";
 import { fetchWithTimeout } from "../lib/fallback.js";
-import { recordCall, estimateTokens } from "../telemetry/telemetry.js";
+import { recordCall, estimateTokens } from "../services/telemetry.js";
 
 // ---------------------------------------------------------------------------
 // LLM copy generators. All FREE options. The MCP inventory is injected into

@@ -39,19 +39,28 @@ npm run mcp      :: MCP inventory server (stdio)
 
 ```
 .
-├── src/                 # React + Vite + TS frontend (the web app)
-├── public/              # static assets (hero images, video, team photos)
-├── server/              # Node + Fastify backend, MCP server, adapters
-│   └── README.md        # backend docs (endpoints, free models, MCP)
-├── automation/          # importable n8n workflows
-├── video/               # 1920×1080 brand slideshow for the demo video
-├── docs/                # project documentation
-│   ├── development/     # database notes, refinement checklist, asset prompts
-│   └── submission/      # hackathon submission material + video script
-└── .kiro/specs/         # the source-of-truth spec (requirements + design)
+├── src/                      # React + Vite + TS frontend
+│   ├── components/
+│   │   ├── layout/           # app shell, sidebar, header, brand, backdrop
+│   │   ├── ui/               # shared primitives (badges, charts, icons)
+│   │   └── features/         # domain components (agent graph, hero, reels…)
+│   ├── views/                # pages (welcome, auth, studio, docs, modules…)
+│   ├── stores/               # Zustand state (auth, pipeline, nav, docs…)
+│   ├── data/                 # mock datasets + builders
+│   └── lib/                  # sound, speech utilities
+├── public/                   # static assets (hero images, video, team photos)
+├── server/                   # Node + Fastify backend, MCP server
+│   └── src/
+│       ├── routes/           # HTTP + SSE endpoints
+│       ├── services/         # domain logic (orchestrator, graph, pulse…)
+│       ├── adapters/         # swappable model/inventory providers
+│       ├── data/             # mock datasets
+│       ├── lib/              # fallback controller, persistence
+│       └── mcp/              # MCP inventory server (stdio)
+├── automation/               # importable n8n workflows
+├── docs/                     # engineering docs (DATABASE.md, index)
+└── .kiro/specs/              # source-of-truth spec (requirements + design)
 ```
-
-See [`docs/README.md`](docs/README.md) for the documentation index.
 
 ## Tech stack
 
@@ -69,5 +78,5 @@ pulse-along-edge agent handoffs, blur-to-resolve hero, count-up analytics.
 ## Status
 
 Frontend is feature-complete across all modules. Backend is built and tested as
-a standalone service (not yet wired to the frontend). Database (Neon + pgvector)
+a standalone service. Database (Neon + pgvector)
 is planned — see `docs/development/DATABASE_NOTES.md`.

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Backdrop } from "./components/Backdrop";
-import { AppShell } from "./components/AppShell";
+import { Backdrop } from "./components/layout/Backdrop";
+import { AppShell } from "./components/layout/AppShell";
 import { LandingView } from "./views/LandingView";
 import { AgentActivityView } from "./views/AgentActivityView";
 import { CreativeView } from "./views/CreativeView";
@@ -16,10 +16,10 @@ import { PricingView } from "./views/PricingView";
 import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
-import { usePipeline } from "./store";
-import { useNav } from "./navStore";
-import { useAuth } from "./authStore";
-import { useScreen } from "./screenStore";
+import { usePipeline } from "./stores/pipelineStore";
+import { useNav } from "./stores/navStore";
+import { useAuth } from "./stores/authStore";
+import { useScreen } from "./stores/screenStore";
 import { primeAudio } from "./lib/sound";
 
 const variants = {

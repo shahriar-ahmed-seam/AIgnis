@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "./GraphView";
-import { useNav } from "../navStore";
+import { useNav } from "../stores/navStore";
 
 /**
  * Brand Workspace — the persistent "home" that sells AInigma as a product, not

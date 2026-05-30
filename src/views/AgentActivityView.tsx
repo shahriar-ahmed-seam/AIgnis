@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { usePipeline } from "../store";
-import { AgentGraph } from "../components/AgentGraph";
-import { LogStream } from "../components/LogStream";
-import { IntelRail } from "../components/IntelRail";
+import { usePipeline } from "../stores/pipelineStore";
+import { AgentGraph } from "../components/features/AgentGraph";
+import { LogStream } from "../components/features/LogStream";
+import { IntelRail } from "../components/features/IntelRail";
 import type { AgentName } from "../types";
 
 const SPEEDS = [1, 2, 4];

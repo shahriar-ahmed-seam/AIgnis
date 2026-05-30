@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { TeamGrid } from "../components/TeamGrid";
-import { DocsAdminBar } from "../components/DocsAdminBar";
-import { useAuth } from "../authStore";
-import { useDocs } from "../docsStore";
+import { TeamGrid } from "../components/features/TeamGrid";
+import { DocsAdminBar } from "../components/features/DocsAdminBar";
+import { useAuth } from "../stores/authStore";
+import { useDocs } from "../stores/docsStore";
 
 /**
  * Live /docs module — YC-style pitch deck + technical whitepaper + live system
