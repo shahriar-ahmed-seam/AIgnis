@@ -10,7 +10,7 @@ import type {
 import { PILLAR_ORDER } from "../types";
 import { resolveDataset } from "../data/datasets";
 import { play } from "../lib/sound";
-import { startRun as apiStartRun, streamRun } from "../lib/api";
+import { startRun as apiStartRun, streamRun, generateLiveCopy } from "../lib/api";
 import { useConnection } from "./connectionStore";
 
 type View = "landing" | "activity" | "creative" | "video" | "pulse";
@@ -202,6 +202,21 @@ function runLocal(dataset: MockDataset, speed: number, set: SetState, get: GetSt
   const total = script.length;
   const timers: number[] = [];
 
+  // Kick off a real LLM copy request in parallel (Vercel /api/generate).
+  // The image + reel stay curated, but the headline/body/CTA become genuine
+  // Groq output when reachable — so a judge typing their own idea sees real
+  // generation. Falls back silently to the curated copy on any failure.
+  const idea = get().productIdea;
+  let liveCopy: { headline: string; body: string; cta: string; model: string } | null = null;
+  generateLiveCopy({ idea, inventory: dataset.intel.inventory }).then((c) => {
+    liveCopy = c;
+    // if the reveal already happened, patch the copy in retroactively
+    const s = get();
+    if (c && s.asset && s.state === "complete") {
+      set({ asset: { ...s.asset, copy: c, copyLabel: "Live" } });
+    }
+  });
+
   script.forEach((evt, i) => {
     const t = window.setTimeout(() => applyEvent(evt, total, i, set, get), evt.timestamp / speed);
     timers.push(t);
@@ -214,8 +229,8 @@ function runLocal(dataset: MockDataset, speed: number, set: SetState, get: GetSt
       state: "complete",
       view: "creative",
       asset: {
-        copy: dataset.copy,
-        copyLabel: "Simulated",
+        copy: liveCopy ?? dataset.copy,
+        copyLabel: liveCopy ? "Live" : "Simulated",
         hero: dataset.heroImage,
         heroLabel: "Simulated",
         palette: paletteFor(dataset.presetId),

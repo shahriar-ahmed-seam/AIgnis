@@ -89,3 +89,39 @@ export function streamRun(runId: string, handlers: RunStreamHandlers): () => voi
 
   return () => es.close();
 }
+
+// ---------------------------------------------------------------------------
+// Serverless LLM copy (Vercel function at /api/generate).
+// Works on the deployed site with no separate backend: real Groq/Llama copy
+// for any typed or spoken idea, while the image + reel stay on the curated
+// default. Returns null on any failure so callers can keep the curated copy.
+// ---------------------------------------------------------------------------
+
+export interface LiveCopyInput {
+  idea: string;
+  inventory?: { sku: string; name: string; stock: number; status: string }[];
+}
+
+export async function generateLiveCopy(
+  input: LiveCopyInput,
+  timeoutMs = 22000
+): Promise<{ headline: string; body: string; cta: string; model: string } | null> {
+  try {
+    const res = await withTimeout(
+      fetch(`/api/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      }),
+      timeoutMs
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as
+      | { ok: true; copy: { headline: string; body: string; cta: string }; model: string }
+      | { ok: false; reason: string };
+    if (!data.ok) return null;
+    return { ...data.copy, model: data.model };
+  } catch {
+    return null;
+  }
+}

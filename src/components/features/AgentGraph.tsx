@@ -2,22 +2,48 @@ import { motion } from "framer-motion";
 import type { AgentName } from "../../types";
 import { AGENT_META, AGENT_ORDER } from "../../types";
 
-// Pentagon layout positions (percentages of the square canvas).
-const NODE_POS: Record<AgentName, { x: number; y: number }> = {
-  Researcher: { x: 50, y: 12 },
-  Analyst: { x: 86, y: 40 },
-  Copywriter: { x: 72, y: 84 },
-  Visual_Director: { x: 28, y: 84 },
-  Operations: { x: 14, y: 40 },
-};
+// ---------------------------------------------------------------------------
+// AgentGraph — an orbital constellation. Five agent "planets" sit evenly on a
+// ring around a glowing CORE (72° apart for perfect radial symmetry). Each
+// planet links to the core with a curved arc; the active handoff arc carries a
+// travelling light pulse. A slow orbit ring, drifting stars, and a faint
+// nebula backdrop make it feel like a living system rather than a boxed graph.
+// ---------------------------------------------------------------------------
 
-// Sequential pipeline edges (Researcher -> Analyst -> ... -> Operations)
-const EDGES: [AgentName, AgentName][] = [
-  ["Researcher", "Analyst"],
-  ["Analyst", "Copywriter"],
-  ["Copywriter", "Visual_Director"],
-  ["Visual_Director", "Operations"],
-];
+// viewBox is 100x100; core at center. Nodes on a circle, Researcher at top,
+// then clockwise in pipeline order — so the swarm reads as one rotation.
+const CX = 50;
+const CY = 50;
+const R = 36; // orbit radius
+
+function nodePos(index: number, total: number) {
+  // start at -90° (top), go clockwise
+  const angle = (-90 + (360 / total) * index) * (Math.PI / 180);
+  return { x: CX + R * Math.cos(angle), y: CY + R * Math.sin(angle), angle };
+}
+
+const POS: Record<AgentName, { x: number; y: number; angle: number }> = AGENT_ORDER.reduce(
+  (acc, name, i) => {
+    acc[name] = nodePos(i, AGENT_ORDER.length);
+    return acc;
+  },
+  {} as Record<AgentName, { x: number; y: number; angle: number }>
+);
+
+// A gentle quadratic curve from the core to a node, bowed perpendicular to the
+// radius so arcs fan out symmetrically instead of being straight spokes.
+function corePath(to: { x: number; y: number }) {
+  const mx = (CX + to.x) / 2;
+  const my = (CY + to.y) / 2;
+  // perpendicular offset for the bow
+  const dx = to.x - CX;
+  const dy = to.y - CY;
+  const len = Math.hypot(dx, dy) || 1;
+  const bow = 7;
+  const ox = (-dy / len) * bow;
+  const oy = (dx / len) * bow;
+  return `M ${CX} ${CY} Q ${mx + ox} ${my + oy} ${to.x} ${to.y}`;
+}
 
 interface Props {
   activeAgent: AgentName | null;
@@ -26,73 +52,122 @@ interface Props {
   handoffEdge: [AgentName, AgentName] | null;
 }
 
-/**
- * The signature visual: 5 agent nodes on a pentagon, connected by edges.
- * Active node glows + scales, completed nodes show a check, and a pulse of
- * light travels the active handoff edge. SVG lines + HTML nodes overlaid.
- */
-export function AgentGraph({ activeAgent, completedAgents, handoffEdge }: Props) {
+export function AgentGraph({ activeAgent, completedAgents }: Props) {
   return (
     <div className="relative aspect-square w-full max-w-[560px]">
-      {/* edges */}
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+      {/* faint nebula backdrop */}
+      <div className="absolute inset-0 overflow-hidden rounded-full">
+        <video
+          src="/reels/default_nebula.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-void-900/40" />
+      </div>
+
+      {/* drifting stars */}
+      <Stars />
+
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100">
         <defs>
-          <linearGradient id="edge-grad" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="arc-grad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#22d3ee" />
-            <stop offset="100%" stopColor="#8b5cf6" />
+            <stop offset="50%" stopColor="#a78bfa" />
+            <stop offset="100%" stopColor="#e879f9" />
           </linearGradient>
+          <radialGradient id="core-grad">
+            <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.55" />
+            <stop offset="55%" stopColor="#22d3ee" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="transparent" />
+          </radialGradient>
+          <filter id="soft-glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="1.2" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        {EDGES.map(([from, to], i) => {
-          const a = NODE_POS[from];
-          const b = NODE_POS[to];
-          const isActiveEdge =
-            handoffEdge && handoffEdge[0] === from && handoffEdge[1] === to;
-          const done = completedAgents.includes(from);
+
+        {/* orbit ring */}
+        <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="0.3" strokeDasharray="0.6 1.8" />
+
+        {/* a second, slowly rotating dashed ring for life */}
+        <motion.circle
+          cx={CX}
+          cy={CY}
+          r={R + 4}
+          fill="none"
+          stroke="rgba(139,92,246,0.18)"
+          strokeWidth="0.2"
+          strokeDasharray="1 3"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: "50% 50%" }}
+        />
+
+        {/* core->node arcs */}
+        {AGENT_ORDER.map((name) => {
+          const meta = AGENT_META[name];
+          const to = POS[name];
+          const lit = completedAgents.includes(name) || activeAgent === name;
+          const active = activeAgent === name;
+          const d = corePath(to);
           return (
-            <g key={i}>
-              <line
-                x1={a.x}
-                y1={a.y}
-                x2={b.x}
-                y2={b.y}
-                stroke={done || isActiveEdge ? "url(#edge-grad)" : "rgba(255,255,255,0.08)"}
-                strokeWidth={isActiveEdge ? 0.9 : 0.5}
+            <g key={`arc-${name}`}>
+              <path
+                d={d}
+                fill="none"
+                stroke={lit ? "url(#arc-grad)" : "rgba(255,255,255,0.08)"}
+                strokeWidth={active ? 0.7 : 0.45}
                 strokeLinecap="round"
+                opacity={lit ? 0.9 : 0.5}
               />
-              {isActiveEdge && (
-                <motion.circle
-                  r="1.4"
-                  fill="#5ce8ff"
-                  initial={{ offsetDistance: "0%" }}
-                  animate={{ cx: [a.x, b.x], cy: [a.y, b.y] }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ filter: "drop-shadow(0 0 3px #5ce8ff)" }}
-                />
+              {/* dash flow + travelling pulse on the active arc */}
+              {active && (
+                <>
+                  <path d={d} fill="none" stroke={meta.color} strokeWidth="0.7" strokeLinecap="round" strokeDasharray="1.4 2.6" opacity="0.9">
+                    <animate attributeName="stroke-dashoffset" from="8" to="0" dur="0.9s" repeatCount="indefinite" />
+                  </path>
+                  <circle r="0.9" fill="#fff" filter="url(#soft-glow)">
+                    <animateMotion dur="1.1s" repeatCount="indefinite" rotate="auto" path={d} />
+                  </circle>
+                </>
               )}
             </g>
           );
         })}
+
+        {/* core */}
+        <circle cx={CX} cy={CY} r="13" fill="url(#core-grad)" />
       </svg>
 
-      {/* center core */}
+      {/* pulsing core label */}
       <motion.div
-        className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,92,246,0.25), rgba(34,211,238,0.08) 60%, transparent)",
-        }}
-        animate={{ scale: [1, 1.08, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full"
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
       >
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-500">core</div>
+        <motion.span
+          className="absolute inset-0 rounded-full border border-violet/30"
+          animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeOut" }}
+        />
+        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-300">core</span>
+        <span className="mt-0.5 h-1 w-1 rounded-full bg-violet-glow shadow-[0_0_8px_#a78bfa]" />
       </motion.div>
 
       {/* nodes */}
       {AGENT_ORDER.map((name) => {
-        const pos = NODE_POS[name];
+        const pos = POS[name];
         const meta = AGENT_META[name];
         const isActive = activeAgent === name;
         const isDone = completedAgents.includes(name);
+        // labels above for the top half, below for the bottom half
+        const above = pos.y < CY;
         return (
           <div
             key={name}
@@ -100,62 +175,118 @@ export function AgentGraph({ activeAgent, completedAgents, handoffEdge }: Props)
             style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
           >
             <motion.div
-              animate={{
-                scale: isActive ? 1.12 : 1,
-                opacity: isDone && !isActive ? 0.7 : 1,
-              }}
+              animate={{ scale: isActive ? 1.14 : 1, opacity: isDone && !isActive ? 0.78 : 1 }}
               transition={{ type: "spring", stiffness: 220, damping: 18 }}
-              className="flex flex-col items-center gap-2"
+              className="relative flex flex-col items-center"
             >
-              <div
-                className="relative flex h-16 w-16 items-center justify-center rounded-2xl border backdrop-blur-md"
-                style={{
-                  borderColor: isActive ? meta.color : "rgba(255,255,255,0.08)",
-                  background: isActive
-                    ? `${meta.color}1a`
-                    : "rgba(255,255,255,0.02)",
-                  boxShadow: isActive ? `0 0 26px -4px ${meta.color}` : "none",
-                }}
-              >
-                <span className="text-2xl" style={{ color: meta.color }}>
-                  {meta.glyph}
-                </span>
+              {/* label above (top nodes) */}
+              {above && <NodeLabel meta={meta} isActive={isActive} className="mb-2" />}
 
-                {/* active ring */}
+              {/* planet */}
+              <div className="relative flex h-14 w-14 items-center justify-center">
+                {/* soft halo */}
+                <span
+                  className="absolute inset-0 rounded-full blur-md transition-opacity duration-300"
+                  style={{ background: meta.color, opacity: isActive ? 0.4 : isDone ? 0.18 : 0.1 }}
+                />
+                {/* orbiting ring around the active planet */}
                 {isActive && (
                   <motion.span
-                    className="absolute inset-0 rounded-2xl border"
+                    className="absolute rounded-full border"
+                    style={{ inset: -6, borderColor: `${meta.color}88` }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  >
+                    <span
+                      className="absolute -top-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
+                      style={{ background: meta.color, boxShadow: `0 0 6px ${meta.color}` }}
+                    />
+                  </motion.span>
+                )}
+                {/* expanding pulse */}
+                {isActive && (
+                  <motion.span
+                    className="absolute inset-0 rounded-full border"
                     style={{ borderColor: meta.color }}
-                    animate={{ scale: [1, 1.35], opacity: [0.6, 0] }}
-                    transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
+                    animate={{ scale: [1, 1.5], opacity: [0.6, 0] }}
+                    transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
                   />
                 )}
-
-                {/* completion check */}
-                {isDone && !isActive && (
-                  <span
-                    className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold text-void-900"
-                    style={{ background: meta.color }}
-                  >
-                    ✓
-                  </span>
-                )}
-              </div>
-              <div className="text-center">
+                {/* the planet body */}
                 <div
-                  className="text-xs font-semibold"
-                  style={{ color: isActive ? meta.color : "#aab2c8" }}
+                  className="relative flex h-full w-full items-center justify-center rounded-full border backdrop-blur-sm"
+                  style={{
+                    borderColor: isActive ? meta.color : isDone ? `${meta.color}66` : "rgba(255,255,255,0.12)",
+                    background: isActive
+                      ? `radial-gradient(circle at 35% 30%, ${meta.color}55, ${meta.color}14 70%)`
+                      : "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.06), rgba(255,255,255,0.02) 70%)",
+                    boxShadow: isActive ? `0 0 24px -4px ${meta.color}` : "none",
+                  }}
                 >
-                  {meta.label}
-                </div>
-                <div className="font-mono text-[9px] uppercase tracking-wider text-ink-500">
-                  {meta.pillar}
+                  <span className="text-xl" style={{ color: meta.color }}>
+                    {meta.glyph}
+                  </span>
+                  {isDone && !isActive && (
+                    <span
+                      className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-void-900"
+                      style={{ background: meta.color }}
+                    >
+                      ✓
+                    </span>
+                  )}
                 </div>
               </div>
+
+              {/* label below (bottom nodes) */}
+              {!above && <NodeLabel meta={meta} isActive={isActive} className="mt-2" />}
             </motion.div>
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function NodeLabel({
+  meta,
+  isActive,
+  className = "",
+}: {
+  meta: { label: string; pillar: string; color: string };
+  isActive: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={`whitespace-nowrap text-center ${className}`}>
+      <div className="text-xs font-semibold" style={{ color: isActive ? meta.color : "#aab2c8" }}>
+        {meta.label}
+      </div>
+      <div className="font-mono text-[9px] uppercase tracking-wider text-ink-500">{meta.pillar}</div>
+    </div>
+  );
+}
+
+/** Subtle drifting stars layer behind the constellation. */
+function Stars() {
+  const stars = Array.from({ length: 22 }, (_, i) => ({
+    id: i,
+    left: `${(i * 47) % 100}%`,
+    top: `${(i * 71) % 100}%`,
+    size: 1 + (i % 3) * 0.6,
+    dur: 5 + (i % 6),
+    delay: (i % 5) * 0.6,
+  }));
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-full">
+      {stars.map((s) => (
+        <motion.span
+          key={s.id}
+          className="absolute rounded-full bg-white/40"
+          style={{ left: s.left, top: s.top, width: s.size, height: s.size }}
+          animate={{ opacity: [0.1, 0.6, 0.1], scale: [1, 1.4, 1] }}
+          transition={{ duration: s.dur, delay: s.delay, repeat: Infinity, ease: "easeInOut" }}
+        />
+      ))}
     </div>
   );
 }

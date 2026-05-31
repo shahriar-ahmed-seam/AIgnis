@@ -691,6 +691,7 @@ const defaultDataset: MockDataset = {
     fallbackGradient:
       "radial-gradient(120% 120% at 50% 15%, #155e75 0%, #4c1d95 45%, #09090b 82%), linear-gradient(135deg, #22d3ee33, #e879f922)",
   },
+  reelVideo: "/reels/default_nebula.mp4",
   analytics: {
     label: "Simulated",
     kpis: [
