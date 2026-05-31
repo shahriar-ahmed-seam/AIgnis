@@ -42,54 +42,59 @@ export function PublishedView() {
           </button>
         </div>
       ) : (
-        <div className="grid flex-1 auto-rows-min grid-cols-[repeat(auto-fill,minmax(200px,1fr))] content-start gap-5 overflow-y-auto pb-2">
-          {posts.map((post, i) => (
-            <motion.a
-              key={post.id}
-              href={post.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => play("tick")}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
-              className="panel panel-hover group flex flex-col overflow-hidden"
-            >
-              {/* preview — 9:16 portrait, the format that was actually posted */}
-              <div className="relative aspect-[9/16] overflow-hidden">
+        <div className="flex flex-1 items-center overflow-y-auto pb-2">
+          <div className="grid w-full grid-cols-3 gap-6">
+            {posts.map((post, i) => (
+              <motion.a
+                key={post.id}
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => play("tick")}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.06 }}
+                className="panel panel-hover group relative mx-auto aspect-[9/16] w-full max-h-[calc(100vh-180px)] overflow-hidden"
+              >
+                {/* the posted reel — full 9:16 */}
                 <HeroImage image={post.hero} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+
+                {/* scrims for legibility (top + bottom) */}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                {/* channel badge */}
                 <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur">
                   <ChannelIcon id={post.channel} size={16} />
                   <span className="font-mono text-[10px] text-white/90">
                     {CHANNEL_NAME[post.channel]}
                   </span>
                 </div>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <div className="line-clamp-2 font-display text-sm font-bold text-white drop-shadow">
+
+                {/* overlaid post info at the bottom */}
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <div className="font-display text-lg font-bold leading-tight text-white drop-shadow">
                     {post.headline}
                   </div>
+                  <div className="mt-2 font-mono text-[10px] text-white/60">
+                    {channelHandle(post.channel)}
+                  </div>
+                  <div className="mt-2 flex items-center gap-4 text-xs text-white/85">
+                    <span>👁 {post.views.toLocaleString()}</span>
+                    <span>♥ {post.likes.toLocaleString()}</span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
+                    <span className="font-mono text-[10px] text-white/50">
+                      {new Date(post.postedAt).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs font-medium text-violet-glow transition-transform group-hover:translate-x-0.5">
+                      Open on platform ↗
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              {/* meta */}
-              <div className="flex flex-1 flex-col p-4">
-                <div className="font-mono text-[10px] text-ink-500">{channelHandle(post.channel)}</div>
-                <div className="mt-2 flex items-center gap-4 text-xs text-ink-300">
-                  <span>👁 {post.views.toLocaleString()}</span>
-                  <span>♥ {post.likes.toLocaleString()}</span>
-                </div>
-                <div className="mt-auto flex items-center justify-between pt-3">
-                  <span className="font-mono text-[10px] text-ink-500">
-                    {new Date(post.postedAt).toLocaleDateString()}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs font-medium text-violet-glow transition-transform group-hover:translate-x-0.5">
-                    Open on platform ↗
-                  </span>
-                </div>
-              </div>
-            </motion.a>
-          ))}
+              </motion.a>
+            ))}
+          </div>
         </div>
       )}
 
