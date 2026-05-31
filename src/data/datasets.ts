@@ -1,6 +1,7 @@
 import type { MockDataset } from "../types";
 import { buildScript } from "./scriptBuilder";
 import { buildPulse } from "./pulseBuilder";
+import { artisanChocolate, glowSkincare, signatureFragrance } from "./datasets.extra";
 
 // ---------------------------------------------------------------------------
 // MOCK DATA LAYER
@@ -103,6 +104,7 @@ const sneakers: MockDataset = {
     fallbackGradient:
       "radial-gradient(120% 120% at 30% 20%, #134e4a 0%, #0f766e 30%, #052e2b 70%), linear-gradient(135deg, #22d3ee33, #a3e63522)",
   },
+  reelVideo: "/reels/Black Shoes.mp4",
   analytics: {
     label: "Simulated",
     kpis: [
@@ -298,6 +300,7 @@ const coldBrew: MockDataset = {
     fallbackGradient:
       "radial-gradient(120% 120% at 70% 20%, #422006 0%, #1c1917 45%, #0c0a09 80%), linear-gradient(135deg, #f59e0b22, #8b5cf622)",
   },
+  reelVideo: "/reels/Drinks.mp4",
   analytics: {
     label: "Simulated",
     kpis: [
@@ -493,6 +496,7 @@ const fitnessApp: MockDataset = {
     fallbackGradient:
       "radial-gradient(120% 120% at 50% 10%, #1e1b4b 0%, #312e81 35%, #09090b 80%), linear-gradient(135deg, #8b5cf633, #22d3ee22)",
   },
+  reelVideo: "/reels/fitness.mp4",
   analytics: {
     label: "Simulated",
     kpis: [
@@ -793,7 +797,14 @@ const defaultDataset: MockDataset = {
   ]),
 };
 
-export const PRESETS: MockDataset[] = [sneakers, coldBrew, fitnessApp];
+export const PRESETS: MockDataset[] = [
+  sneakers,
+  coldBrew,
+  fitnessApp,
+  artisanChocolate,
+  glowSkincare,
+  signatureFragrance,
+];
 export const DEFAULT_DATASET = defaultDataset;
 
 /** Resolve a dataset for a free-text idea. Always returns a dataset (Req 6.4). */

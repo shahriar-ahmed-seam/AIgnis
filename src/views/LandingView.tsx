@@ -165,25 +165,60 @@ export function LandingView() {
           </motion.p>
         )}
 
-        {/* preset chips */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <span className="label-mono">Try</span>
-          {PRESETS.map((p, i) => (
-            <motion.button
-              key={p.presetId}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.36 + i * 0.07 }}
-              onClick={() => {
-                setIdea(p.exampleLabel);
-                launch(p.exampleLabel);
-              }}
-              className="group flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2 text-sm text-ink-300 transition-all duration-200 hover:border-violet/40 hover:bg-violet/10 hover:text-ink-100"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-violet/60 transition-colors group-hover:bg-violet-glow" />
-              {p.exampleLabel}
-            </motion.button>
-          ))}
+        {/* or pick a ready demo */}
+        <div className="mt-10">
+          <div className="mb-4 text-center">
+            <span className="font-mono text-[11px] text-ink-500">
+              type or speak your own idea above — or pick a ready demo to watch
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {PRESETS.map((p, i) => {
+              const meta = DEMO_META[p.presetId] ?? { thumb: p.heroImage.src, glyph: "✦" };
+              return (
+                <motion.button
+                  key={p.presetId}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.34 + i * 0.06 }}
+                  onClick={() => {
+                    setIdea(p.exampleLabel);
+                    launch(p.exampleLabel);
+                  }}
+                  className="group relative overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.02] text-left transition-colors duration-300 hover:border-violet/40"
+                >
+                  {/* thumb */}
+                  <div className="relative h-24 overflow-hidden">
+                    <img
+                      src={meta.thumb}
+                      alt={p.exampleLabel}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.opacity = "0";
+                      }}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-void-900 via-void-900/30 to-transparent" />
+                    {/* play hint */}
+                    <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-[10px] text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                      ▶
+                    </span>
+                  </div>
+                  {/* label */}
+                  <div className="flex items-center gap-2 px-3 py-2.5">
+                    <span className="text-sm" style={{ color: meta.color ?? "#a78bfa" }}>
+                      {meta.glyph}
+                    </span>
+                    <span className="flex-1 truncate text-sm font-medium text-ink-200 group-hover:text-ink-100">
+                      {p.exampleLabel}
+                    </span>
+                    <span className="font-mono text-[14px] text-ink-600 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-violet-glow">
+                      →
+                    </span>
+                  </div>
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
       </motion.div>
 
@@ -192,14 +227,25 @@ export function LandingView() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
-        className="absolute bottom-8 flex items-center gap-8 font-mono text-xs text-ink-500"
+        className="mt-12 flex items-center gap-8 font-mono text-xs text-ink-500"
       >
         <span>5 specialized agents</span>
         <span className="h-1 w-1 rounded-full bg-ink-700" />
-        <span>text · image · strategy</span>
+        <span>text · image · video · voice</span>
         <span className="h-1 w-1 rounded-full bg-ink-700" />
         <span>~60s autonomous run</span>
       </motion.div>
     </div>
   );
 }
+
+// Display metadata for the six ready demos — a hero thumbnail (campaign 9:16
+// where available, else the landscape hero), a category glyph and accent.
+const DEMO_META: Record<string, { thumb: string; glyph: string; color: string }> = {
+  "eco-sneakers": { thumb: "/campaigns/eco-sneakers.webp", glyph: "◎", color: "#34d399" },
+  "cold-brew": { thumb: "/campaigns/cold-brew.webp", glyph: "◈", color: "#f59e0b" },
+  "ai-fitness": { thumb: "/campaigns/ai-fitness.webp", glyph: "✦", color: "#8b5cf6" },
+  "artisan-chocolate": { thumb: "/campaigns/artisan-chocolate.webp", glyph: "❖", color: "#fb923c" },
+  "glow-skincare": { thumb: "/heroes/skin-cream.webp", glyph: "✧", color: "#f472b6" },
+  "signature-fragrance": { thumb: "/heroes/fragrance.webp", glyph: "⬡", color: "#e879f9" },
+};

@@ -46,6 +46,27 @@ const MANIFEST = [
     prompt:
       "Premium product photograph of sleek noise-cancelling over-ear headphones, matte dark finish with subtle blue accent lighting, floating on a deep slate-to-black gradient, minimalist focused studio composition, commercial advertising photography, 8k, generous negative space",
   },
+  {
+    tag: "hero",
+    out: "heroes/artisan-chocolate.webp",
+    w: 1280, h: 800, seed: 41,
+    prompt:
+      "Premium product photograph of luxury artisan dark chocolate bars with gold foil wrapping, broken pieces revealing glossy single-origin cacao, scattered cocoa nibs and a dusting of cocoa powder, rich brown and warm gold tones, dramatic moody studio lighting, indulgent commercial food photography, 8k, generous negative space on the left",
+  },
+  {
+    tag: "hero",
+    out: "heroes/skin-cream.webp",
+    w: 1280, h: 800, seed: 42,
+    prompt:
+      "Premium product photograph of a minimalist whipped body cream jar with a soft matte ceramic finish, a delicate swirl of cream beside it, warm amber and cream tones, soft diffused spa lighting, dewy nourishing aesthetic, clean background, commercial beauty photography, 8k, generous negative space on the left",
+  },
+  {
+    tag: "hero",
+    out: "heroes/fragrance.webp",
+    w: 1280, h: 800, seed: 43,
+    prompt:
+      "Premium product photograph of an elegant minimalist perfume bottle with faceted glass and a gold cap, soft mist and a single sculptural orchid, deep violet and midnight-blue tones with magenta rim lighting, dramatic luxury studio composition, commercial fragrance advertising photography, 8k, generous negative space on the left",
+  },
 
   // ---------- 9:16 campaign heroes (new campaign ideas) ----------
   {

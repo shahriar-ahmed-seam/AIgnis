@@ -168,6 +168,9 @@ export interface MockDataset {
   agentScript: AgentEvent[];
   copy: MarketingCopy;
   heroImage: ImageRef;
+  /** optional pre-rendered reel (a real MP4 under /public) used by the Video
+   *  step as the "exported" social video for this campaign. */
+  reelVideo?: string;
   analytics: AnalyticsBundle;
   intel: IntelBundle;
   pulse: PulseBundle;

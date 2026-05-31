@@ -17,19 +17,25 @@ export function VideoReel({
   hero,
   copy,
   presetId,
+  reelVideo,
   playing,
 }: {
   spec: ReelSpec;
   hero: ImageRef;
   copy: MarketingCopy;
   presetId: string;
+  reelVideo?: string;
   playing: boolean;
 }) {
   const captions = [copy.headline, copy.body, copy.cta];
   const [beat, setBeat] = useState(0);
   const [progress, setProgress] = useState(0);
   const [hasMp4, setHasMp4] = useState(false);
-  const videoSrc = `/video/reels/${presetId}-${spec.format}.mp4`;
+  // Prefer an explicit per-campaign reel (a real MP4 in /public/reels); else
+  // fall back to the per-format convention used by exported renders.
+  const videoSrc = reelVideo
+    ? encodeURI(reelVideo)
+    : `/video/reels/${presetId}-${spec.format}.mp4`;
 
   // probe for a real exported MP4
   useEffect(() => {

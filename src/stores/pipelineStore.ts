@@ -166,6 +166,12 @@ function paletteFor(presetId: string): string[] {
       return ["#1c1917", "#f59e0b", "#a78bfa", "#e8ecf7"];
     case "ai-fitness":
       return ["#312e81", "#8b5cf6", "#22d3ee", "#e8ecf7"];
+    case "artisan-chocolate":
+      return ["#1c1917", "#7c2d12", "#fb923c", "#e8ecf7"];
+    case "glow-skincare":
+      return ["#78350f", "#fbbf24", "#f472b6", "#e8ecf7"];
+    case "signature-fragrance":
+      return ["#1e1b4b", "#a78bfa", "#e879f9", "#e8ecf7"];
     default:
       return ["#155e75", "#22d3ee", "#e879f9", "#e8ecf7"];
   }

@@ -101,6 +101,7 @@ export function VideoView() {
               hero={asset.hero}
               copy={asset.copy}
               presetId={dataset.presetId}
+              reelVideo={dataset.reelVideo}
               playing={playing}
             />
           </div>
