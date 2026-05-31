@@ -13,7 +13,7 @@ import { recordCall, estimateTokens } from "../services/telemetry.js";
 //   - Ollama      : fully local Llama, no key, no internet
 // ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are the Copywriter agent in AInigma, an autonomous marketing engine.
+const SYSTEM_PROMPT = `You are the Copywriter agent in AIgnis, an autonomous marketing engine.
 Write punchy, on-brand marketing copy for the given product idea.
 Use the provided inventory context to stay grounded (mention scarcity if stock is low, etc.).
 Respond ONLY with strict JSON: {"headline": string (max 6 words), "body": string (max 32 words), "cta": string (max 4 words)}.
@@ -116,8 +116,8 @@ export class OpenRouterCopyGenerator implements CopyGenerator {
       inventory,
       timeoutMs: config.llm.timeoutMs,
       extraHeaders: {
-        "HTTP-Referer": "https://ainigma.local",
-        "X-Title": "AInigma",
+        "HTTP-Referer": "https://aignis.local",
+        "X-Title": "AIgnis",
       },
     });
   }

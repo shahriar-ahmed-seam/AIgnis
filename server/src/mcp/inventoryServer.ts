@@ -40,7 +40,7 @@ async function loadInventory(): Promise<{ items: RawItem[]; updatedAt: string; w
 }
 
 const server = new McpServer({
-  name: "ainigma-inventory",
+  name: "aignis-inventory",
   version: "0.1.0",
 });
 
@@ -129,10 +129,10 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   // stderr is safe for logs (stdout is the MCP channel)
-  console.error("[ainigma-inventory] MCP server running on stdio");
+  console.error("[aignis-inventory] MCP server running on stdio");
 }
 
 main().catch((err) => {
-  console.error("[ainigma-inventory] fatal:", err);
+  console.error("[aignis-inventory] fatal:", err);
   process.exit(1);
 });

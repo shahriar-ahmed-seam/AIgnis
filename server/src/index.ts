@@ -62,13 +62,13 @@ async function main() {
 
   await app.listen({ port: config.port, host: config.host });
   app.log.info(
-    `AInigma backend ready on http://${config.host}:${config.port} ` +
+    `AIgnis backend ready on http://${config.host}:${config.port} ` +
       `| LLM=${config.llm.provider}(${llmEnabled() ? "on" : "off"}) ` +
       `IMAGE=${config.image.provider}(${imageEnabled() ? "on" : "off"})`
   );
 }
 
 main().catch((err) => {
-  console.error("Failed to start AInigma backend:", err);
+  console.error("Failed to start AIgnis backend:", err);
   process.exit(1);
 });

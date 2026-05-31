@@ -1,82 +1,93 @@
-# AIgnis — Autonomous Multimodal Marketing Engine
+# AIgnis
 
-> Built by **Team AInigma** for the Infinity AI BuildFest 2026 · Domain: Branding & Marketing (MarTech) · Challenge: Multimodal Content Engine.
+Most small brands can't afford a marketing team, and the generic AI tools they
+reach for don't know anything about their actual business. AIgnis is our answer:
+you describe a product in a sentence, and a team of AI agents takes it from there,
+researching the market, writing the copy, designing the creative, cutting the
+video, publishing it, and then watching how it performs and improving it.
 
-AIgnis turns a single product idea into a complete, on-brand marketing campaign.
-A swarm of specialized AI agents researches the market, writes the copy, renders
-the creative, produces channel-ready video and voice, publishes across channels,
-then reads real performance and self-optimizes — grounded in the brand's live
-data the whole way.
+Built by **Team AInigma** for the Infinity AI BuildFest 2026 (Branding & Marketing,
+Multimodal Content Engine track).
 
-## Highlights
+## What it does
 
-- **5-agent swarm** (Researcher · Analyst · Copywriter · Visual Director · Operations) with live, streamed collaboration.
-- **Grounded** via a custom **MCP** inventory server and a **GraphRAG** brand knowledge graph.
-- **Multimodal output:** copy, hero image (diffusion), video reels, and AI voiceover.
-- **Closed loop:** publish → Campaign Pulse analytics → one-click self-optimization.
-- **Cost-aware:** a semantic model router prefers local Llama, with full LLMOps telemetry.
-- **Honest provenance:** every output labeled Live vs Simulated.
-- **Free models:** Llama 3.x (Ollama/Groq/OpenRouter), FLUX/SDXL (Hugging Face/Pollinations).
+You give it an idea. Five agents pick it up and pass work between them:
 
-## Quick start
+- **Researcher** digs through market signals and reviews for the angle that lands.
+- **Analyst** pulls your real inventory, pricing, and margins through a private MCP connection.
+- **Copywriter** writes in your brand's voice and picks the line that resonates.
+- **Visual Director** renders the hero image to your palette with a diffusion model.
+- **Operations** assembles the channel-ready reels and voiceover, then ships it.
 
-Frontend (web app):
-```cmd
+After launch it doesn't go quiet. The Pulse view reads what's actually happening
+on each channel, the Analyst explains it in plain language, and a single click
+sends the swarm back in to rewrite what isn't working.
+
+Two things keep it honest. A brand knowledge graph holds the rules, audiences,
+and compliance constraints the agents have to respect, and every piece of output
+is labelled so you always know whether it came from a live model or a fallback.
+
+## Running it
+
+The web app:
+
+```bash
 npm install
 npm run dev
 ```
-Open the printed URL (default http://localhost:5173). Best at 1920×1080.
 
-Backend (API + MCP, optional — runs standalone):
-```cmd
+That opens on http://localhost:5173. It works on its own straight away, using the
+built-in demo engine, so you don't need anything else to try it.
+
+To run it against the real backend:
+
+```bash
 cd server
 npm install
-npm run dev      :: API on http://localhost:8787
-npm run mcp      :: MCP inventory server (stdio)
+npm run dev      # API on http://localhost:8787
 ```
 
-## Project structure
+When the backend is up, the app detects it and the **Live / Demo** switch in the
+header turns on. Live runs the pipeline through the backend (real model calls
+where keys are configured); Demo runs everything locally. If a live run ever hits
+a snag, the app quietly drops back to Demo so a presentation never stalls.
+
+The five MCP servers run on their own over stdio — see `server/README.md`.
+
+## How it's put together
 
 ```
-.
-├── src/                      # React + Vite + TS frontend
-│   ├── components/
-│   │   ├── layout/           # app shell, sidebar, header, brand, backdrop
-│   │   ├── ui/               # shared primitives (badges, charts, icons)
-│   │   └── features/         # domain components (agent graph, hero, reels…)
-│   ├── views/                # pages (welcome, auth, studio, docs, modules…)
-│   ├── stores/               # Zustand state (auth, pipeline, nav, docs…)
-│   ├── data/                 # mock datasets + builders
-│   └── lib/                  # sound, speech utilities
-├── public/                   # static assets (hero images, video, team photos)
-├── server/                   # Node + Fastify backend, MCP server
-│   └── src/
-│       ├── routes/           # HTTP + SSE endpoints
-│       ├── services/         # domain logic (orchestrator, graph, pulse…)
-│       ├── adapters/         # swappable model/inventory providers
-│       ├── data/             # mock datasets
-│       ├── lib/              # fallback controller, persistence
-│       └── mcp/              # MCP inventory server (stdio)
-├── automation/               # importable n8n workflows
-├── docs/                     # engineering docs (DATABASE.md, index)
-└── .kiro/specs/              # source-of-truth spec (requirements + design)
+src/                      the web app (React + Vite + TypeScript)
+  components/
+    layout/               shell, sidebar, header, brand
+    ui/                   small shared pieces (badges, charts, icons)
+    features/             the bigger domain pieces (agent graph, reels, hero)
+  views/                  the pages
+  stores/                 app state (auth, pipeline, connection, nav...)
+  data/                   demo datasets
+  lib/                    api client, sound, speech
+server/                   the backend (Node + Fastify)
+  src/
+    routes/               HTTP + streaming endpoints
+    services/             the domain logic (orchestrator, graph, pulse...)
+    adapters/             swappable model + inventory providers
+    mcp/                  five MCP servers
+automation/               n8n workflows
+docs/                     engineering notes
+.kiro/specs/              the spec we built from
 ```
 
-## Tech stack
+## The stack
 
-**Frontend:** React 18 · Vite · TypeScript · Tailwind CSS · Framer Motion · Recharts · Zustand
-**Backend:** Node · Fastify · Server-Sent Events · @modelcontextprotocol/sdk · Zod
-**AI & data:** Llama 3.x (Ollama/Groq/OpenRouter) · FLUX/SDXL (Hugging Face/Pollinations) · pgvector + GraphRAG
-**Tooling:** built spec-first in Kiro (AI-DLC)
+The front end is React, Vite, TypeScript and Tailwind, with Framer Motion for the
+animation and Recharts for the dashboards. The backend is Node and Fastify, and it
+streams the agent run to the browser over Server-Sent Events. For the models we
+lean on free options: Llama 3 through Ollama, Groq or OpenRouter for text, and
+FLUX or SDXL through Hugging Face or Pollinations for images. The MCP servers use
+the official Model Context Protocol SDK. We built the whole thing spec-first in Kiro.
 
-## Design system (Command Center)
+## A note on data
 
-Near-black canvas, electric cyan→violet→magenta accents. Sora (display), Inter
-(body), JetBrains Mono (technical labels). Motion-rich: drifting aurora backdrop,
-pulse-along-edge agent handoffs, blur-to-resolve hero, count-up analytics.
-
-## Status
-
-Frontend is feature-complete across all modules. Backend is built and tested as
-a standalone service. Database (Neon + pgvector)
-is planned — see `docs/development/DATABASE_NOTES.md`.
+We use Neon (serverless Postgres) with pgvector as the target store for users,
+campaigns, and the embeddings behind retrieval. The plan and the migration path
+are written up in `docs/DATABASE.md`.

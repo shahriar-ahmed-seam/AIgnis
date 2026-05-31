@@ -1,7 +1,11 @@
-# AIgnis — Documentation
+# AIgnis — documentation
 
-- **Specs** (`.kiro/specs/ainigma-content-engine/`) — `requirements.md` and
-  `design.md`, the source of truth the product was built from.
-- **`DATABASE.md`** — database decision (Neon + pgvector) and migration plan.
-- **Backend** — see `server/README.md` (endpoints, free models, MCP server).
-- **Automation** — see `automation/README.md` (importable n8n workflows).
+A quick map of where things are written down.
+
+- **The spec** lives in `.kiro/specs/ainigma-content-engine/` — `requirements.md`
+  and `design.md` are what we built the product from.
+- **`DATABASE.md`** covers the database choice (Neon + pgvector) and how we'd
+  migrate the current file-based store to it.
+- **The backend** is documented in `server/README.md` — endpoints, the free
+  models, and the five MCP servers.
+- **The n8n workflows** are explained in `automation/README.md`.

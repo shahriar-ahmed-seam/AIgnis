@@ -4,6 +4,7 @@ import { PillarBar } from "./PillarBar";
 import { ModeIndicator } from "../ui/ModeIndicator";
 import { PillarDrawer } from "./PillarDrawer";
 import { SoundToggle } from "./SoundToggle";
+import { ConnectionToggle } from "./ConnectionToggle";
 import { Sidebar } from "./Sidebar";
 import { UserMenu } from "./UserMenu";
 import { usePipeline } from "../../stores/pipelineStore";
@@ -29,6 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <PillarBar statuses={pillarStatuses} />
           </button>
           <div className="hidden h-6 w-px bg-white/10 xl:block" />
+          <ConnectionToggle />
           <div className="flex items-center gap-2">
             <span className="label-mono">Mode</span>
             <ModeIndicator label={executionMode === "Live" ? "Live" : "Simulated"} />

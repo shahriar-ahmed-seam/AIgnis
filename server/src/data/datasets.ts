@@ -106,7 +106,7 @@ const defaultDataset: MockDataset = {
   palette: ["#155e75", "#22d3ee", "#e879f9", "#e8ecf7"],
   copy: {
     headline: "Built For What's Next.",
-    body: "AInigma turned your idea into a complete, on-brand campaign — copy, creative, and channel strategy — in a single autonomous pass.",
+    body: "AIgnis turned your idea into a complete, on-brand campaign — copy, creative, and channel strategy — in a single autonomous pass.",
     cta: "Launch Campaign",
   },
   heroImage: {

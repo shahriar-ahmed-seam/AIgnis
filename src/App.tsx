@@ -20,6 +20,7 @@ import { usePipeline } from "./stores/pipelineStore";
 import { useNav } from "./stores/navStore";
 import { useAuth } from "./stores/authStore";
 import { useScreen } from "./stores/screenStore";
+import { useConnection } from "./stores/connectionStore";
 import { primeAudio } from "./lib/sound";
 
 const variants = {
@@ -89,6 +90,11 @@ export default function App() {
     const prime = () => primeAudio();
     window.addEventListener("pointerdown", prime, { once: true });
     return () => window.removeEventListener("pointerdown", prime);
+  }, []);
+
+  // Probe the backend once on load to pick Live vs Demo automatically.
+  useEffect(() => {
+    void useConnection.getState().init();
   }, []);
 
   // Public /docs route: anyone hitting {app}/docs sees the docs page directly

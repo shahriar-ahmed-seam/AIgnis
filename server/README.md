@@ -1,37 +1,43 @@
-# AInigma Backend (Demo)
+# AIgnis Backend
 
-The backend for AInigma — a Node + Fastify + TypeScript service that runs the
-simulated multi-agent pipeline, streams agent events over SSE, exposes an
-optional **Live Pass** (real free models), and ships a standalone **MCP
-inventory server**.
+The backend behind AIgnis. It's a Node + Fastify service in TypeScript that runs
+the multi-agent pipeline, streams each agent's progress to the browser over
+Server-Sent Events, performs real model calls when keys are configured, and ships
+five Model Context Protocol servers.
 
-> Not yet wired to the frontend — this is a standalone, fully tested service.
-> Default mode is **Simulated** (no keys, no network). Every Live capability is
-> guarded by a Fallback Controller, so missing/slow/erroring providers
-> transparently fall back to curated mock data labeled `"Simulated"`.
+The web app connects to this automatically: when the server is running, the app's
+Live / Demo switch turns on and runs the pipeline through here. Nothing requires
+keys to start, with none set the pipeline runs from a curated dataset, and every
+real call is wrapped so a missing or slow provider falls back cleanly and the
+output is labelled accordingly. That way the app keeps working whether or not the
+backend (or any model key) is present.
 
 ---
 
 ## Run it
 
-```cmd
+```bash
 cd server
 npm install
-npm run dev        :: starts the API on http://localhost:8787
+npm run dev        # API on http://localhost:8787
 ```
 
-Optional — copy `.env.example` to `.env` to enable Live models (see below).
+Copy `.env.example` to `.env` to turn on real models (see below).
 
-Standalone MCP server (stdio):
+The MCP servers run on their own over stdio:
 
-```cmd
-npm run mcp
+```bash
+npm run mcp            # inventory
+npm run mcp:brand      # brand guidelines
+npm run mcp:memory     # campaign memory
+npm run mcp:market     # market intelligence
+npm run mcp:analytics  # campaign analytics
 ```
 
-Smoke-test the MCP server end to end:
+Smoke-test all five at once:
 
-```cmd
-npx tsx src/mcp/testClient.ts
+```bash
+npx tsx src/mcp/testAllServers.ts
 ```
 
 ---
