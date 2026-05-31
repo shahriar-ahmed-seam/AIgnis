@@ -25,10 +25,11 @@ interface DocsStore extends DocsSettings {
 
 const STORAGE_KEY = "aignis.docs.settings";
 
-// Default judging window — June 10 00:00 → June 14 23:59 (current year).
+// Default — docs are publicly open (unlocked for judging). Switch back to
+// "scheduled" with the window below to gate visibility again.
 const YEAR = new Date().getFullYear();
 const DEFAULTS: DocsSettings = {
-  mode: "scheduled",
+  mode: "always",
   startISO: `${YEAR}-06-10T00:00`,
   endISO: `${YEAR}-06-14T23:59`,
 };
