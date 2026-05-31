@@ -147,10 +147,10 @@ function ChannelCard({
 
       {/* metrics */}
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <Metric label="Impressions" value={<CountUp value={m.impressions} format />} />
-        <Metric label="Engagement" value={<CountUp value={m.engagementRate} decimals={1} suffix="%" />} />
-        <Metric label="CTR" value={<CountUp value={m.ctr} decimals={1} suffix="%" />} />
-        <Metric label="Conversions" value={<CountUp value={m.conversions} format />} />
+        <Metric label="Impressions" value={<CountUp value={m.impressions} format />} lift={optimized} />
+        <Metric label="Engagement" value={<CountUp value={m.engagementRate} decimals={1} suffix="%" />} lift={optimized} />
+        <Metric label="CTR" value={<CountUp value={m.ctr} decimals={1} suffix="%" />} lift={optimized} />
+        <Metric label="Conversions" value={<CountUp value={m.conversions} format />} lift={optimized} />
       </div>
 
       {/* comments */}
@@ -177,12 +177,19 @@ function ChannelCard({
   );
 }
 
-function Metric({ label, value }: { label: string; value: React.ReactNode }) {
+function Metric({ label, value, lift }: { label: string; value: React.ReactNode; lift?: boolean }) {
   return (
-    <div className="rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5">
+    <motion.div
+      className="rounded-lg border bg-white/[0.02] p-2.5"
+      animate={{
+        borderColor: lift ? "rgba(163,230,53,0.35)" : "rgba(255,255,255,0.05)",
+        backgroundColor: lift ? "rgba(163,230,53,0.06)" : "rgba(255,255,255,0.02)",
+      }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="label-mono">{label}</div>
       <div className="mt-1 font-display text-lg font-bold text-ink-100">{value}</div>
-    </div>
+    </motion.div>
   );
 }
 
