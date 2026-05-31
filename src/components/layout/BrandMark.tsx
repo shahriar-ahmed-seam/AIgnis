@@ -21,9 +21,9 @@ export function BrandMark({ size = 48 }: { size?: number }) {
           src="/logo.png"
           alt="AIgnis"
           onError={() => setImgOk(false)}
-          className="relative z-10 h-full w-full object-contain drop-shadow-[0_0_6px_rgba(92,232,255,0.35)]"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          className="relative z-10 h-full w-full scale-[1.32] object-contain drop-shadow-[0_0_6px_rgba(92,232,255,0.35)]"
+          initial={{ opacity: 0, scale: 1.18 }}
+          animate={{ opacity: 1, scale: 1.32 }}
           transition={{ duration: 0.5 }}
         />
       </div>
