@@ -49,16 +49,20 @@
 }
 
 @layer components {
-  /* Frosted glass panel — the core surface of the Command Center */
+  /* Frosted glass surface — the core Command Center surface. Flat glass on the
+     living backdrop (no heavy drop shadow) reads more modern than a boxy card. */
   .panel {
-    @apply relative rounded-2xl border border-white/[0.06] bg-void-700/60 backdrop-blur-xl;
-    box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
-      0 24px 60px -24px rgba(0, 0, 0, 0.8);
+    @apply relative rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
   }
 
   .panel-hover {
-    @apply transition-all duration-300 hover:border-white/[0.12] hover:bg-void-600/60;
+    @apply transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04];
+  }
+
+  /* Small inner surface used inside panels for rows / metric tiles. */
+  .inset {
+    @apply rounded-xl border border-white/[0.05] bg-white/[0.015];
   }
 
   /* Gradient text used for headlines and the brand mark */

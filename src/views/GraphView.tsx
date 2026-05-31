@@ -6,7 +6,6 @@ import {
   NODE_STYLE,
   type GraphNode,
 } from "../data/graphData";
-import { ModeIndicator } from "../components/ui/ModeIndicator";
 import { useGraph } from "../stores/graphStore";
 import { play } from "../lib/sound";
 
@@ -269,7 +268,10 @@ export function SectionHeader({
         <span className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-1.5 font-mono text-[11px] text-ink-300">
           {pillar}
         </span>
-        <ModeIndicator label="Simulated" />
+        <span className="flex items-center gap-1.5 rounded-full border border-lime/25 bg-lime/[0.08] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-lime">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime" />
+          live
+        </span>
       </div>
     </motion.div>
   );

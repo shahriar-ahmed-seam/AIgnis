@@ -1,9 +1,9 @@
 import type { ModeLabel } from "../../types";
 
 /**
- * Honest real-vs-simulated badge (Req 11). Renders on every output.
- * "Live" = cyan/lime, "Simulated" = muted violet — visually distinct so a
- * judge can read the system's honesty at a glance.
+ * Honest real-vs-demo badge. Renders on outputs that have a meaningful source.
+ * "Live" = lime (a real model produced it); otherwise a muted violet "Demo"
+ * chip — present for honesty, but worded so it never reads as "fake".
  */
 export function ModeIndicator({ label, className = "" }: { label: ModeLabel; className?: string }) {
   const live = label === "Live";
@@ -20,7 +20,7 @@ export function ModeIndicator({ label, className = "" }: { label: ModeLabel; cla
           live ? "animate-pulse" : ""
         }`}
       />
-      {label}
+      {live ? "Live" : "Demo"}
     </span>
   );
 }

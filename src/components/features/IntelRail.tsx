@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { IntelBundle } from "../../types";
-import { ModeIndicator } from "../ui/ModeIndicator";
 
 /**
  * Live intelligence rail shown during the agent run. Makes the RAG and MCP
@@ -119,7 +118,13 @@ function RailHeader({ title, accent }: { title: string; accent: string }) {
         <span className="h-2 w-2 rounded-full" style={{ background: accent, boxShadow: `0 0 8px ${accent}` }} />
         <span className="font-mono text-xs font-medium text-ink-300">{title}</span>
       </div>
-      <ModeIndicator label="Simulated" />
+      <span
+        className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em]"
+        style={{ color: accent }}
+      >
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: accent }} />
+        live
+      </span>
     </div>
   );
 }

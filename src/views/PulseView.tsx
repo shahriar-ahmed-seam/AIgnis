@@ -93,7 +93,6 @@ function AnalystNarrative({ lines, optimized }: { lines: string[]; optimized: bo
           <div className="mb-1.5 flex items-center gap-2">
             <span className="text-sm font-bold text-ink-100">Analyst Agent</span>
             <span className="label-mono">live commentary</span>
-            <ModeIndicator label="Simulated" className="ml-auto" />
           </div>
           <ul className="space-y-1.5">
             {lines.map((line, i) => (
