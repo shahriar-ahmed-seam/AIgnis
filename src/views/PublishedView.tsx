@@ -42,7 +42,7 @@ export function PublishedView() {
           </button>
         </div>
       ) : (
-        <div className="grid flex-1 grid-cols-3 gap-5 overflow-y-auto pb-2">
+        <div className="grid flex-1 auto-rows-min grid-cols-3 content-start gap-5 overflow-y-auto pb-2">
           {posts.map((post, i) => (
             <motion.a
               key={post.id}
