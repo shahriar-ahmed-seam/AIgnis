@@ -1,38 +1,15 @@
-<div align="center">
-
-<img src="docs/banner.webp" alt="AIgnis" width="100%" />
-
-<br/>
-
-<img src="public/logo.png" alt="AIgnis logo" width="92" />
+<img src="public/readme_banner.png" alt="AIgnis" width="100%" />
 
 # AIgnis
-
-### From one idea to a launched, self-optimizing campaign.
-
-An autonomous, multi-agent marketing engine — describe a product in a sentence
-and a swarm of AI agents researches, writes, designs, films, ships, and optimizes
-the whole campaign.
-
-<br/>
-
-![React](https://img.shields.io/badge/React-18-22d3ee?style=flat-square&logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-5-a78bfa?style=flat-square&logo=vite&logoColor=white)
-![Node](https://img.shields.io/badge/Node-Fastify-a3e635?style=flat-square&logo=node.js&logoColor=white)
-![MCP](https://img.shields.io/badge/Model_Context_Protocol-5_servers-e879f9?style=flat-square)
-
-**[Live demo →](https://a-ignis.vercel.app)**  ·  Built by **Team AInigma** · Infinity AI BuildFest 2026
-
-</div>
-
----
 
 Most small brands can't afford a marketing team, and the generic AI tools they
 reach for don't know anything about their actual business. AIgnis is our answer:
 you describe a product in a sentence, and a team of AI agents takes it from there,
 researching the market, writing the copy, designing the creative, cutting the
 video, publishing it, and then watching how it performs and improving it.
+
+Built by **Team AInigma** for the Infinity AI BuildFest 2026 (Branding & Marketing,
+Multimodal Content Engine track).
 
 ## What it does
 
@@ -51,18 +28,6 @@ sends the swarm back in to rewrite what isn't working.
 Two things keep it honest. A brand knowledge graph holds the rules, audiences,
 and compliance constraints the agents have to respect, and every piece of output
 is labelled so you always know whether it came from a live model or a fallback.
-
-## Campaigns it generates
-
-Real creatives produced by the engine — copy, hero image, and channel-ready reels:
-
-<p align="center">
-  <img src="public/campaigns/eco-sneakers.webp" alt="Eco sneakers campaign" width="19%" />
-  <img src="public/campaigns/cold-brew.webp" alt="Cold brew campaign" width="19%" />
-  <img src="public/campaigns/artisan-chocolate.webp" alt="Artisan chocolate campaign" width="19%" />
-  <img src="public/campaigns/luxury-watch.webp" alt="Luxury watch campaign" width="19%" />
-  <img src="public/campaigns/electric-bike.webp" alt="Electric bike campaign" width="19%" />
-</p>
 
 ## Running it
 
