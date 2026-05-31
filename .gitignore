@@ -34,6 +34,6 @@ Thumbs.db
 # Local-only material — not part of the codebase
 image/
 *.pdf
-video/
+/video/
 docs/submission/
 docs/development/
