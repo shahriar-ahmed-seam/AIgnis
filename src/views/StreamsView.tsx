@@ -1,50 +1,18 @@
-import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { SectionHeader } from "./GraphView";
-import {
-  ALL_SOURCES,
-  makeEvent,
-  SOURCE_META,
-  type StreamEvent,
-  type StreamSource,
-} from "../data/streamData";
+import { useStreams } from "../stores/streamsStore";
+import { ALL_SOURCES, SOURCE_META } from "../data/streamData";
 
 /**
- * Live Data Streams — a real-time ingestion console. Multiple synthetic
- * sources (CDC, scraper, reviews, social) emit events on intervals, flowing
- * into a unified feed with per-source throughput counters. This is the
- * streaming/Kafka + CDC pillar made visual.
+ * Live Data Streams — a real-time ingestion console. The ingestion bus runs
+ * globally from app load (see streamsStore), so the feed is already alive on
+ * arrival and never resets when you switch tabs. This view is a pure reader.
  */
 export function StreamsView() {
-  const [events, setEvents] = useState<StreamEvent[]>([]);
-  const [counts, setCounts] = useState<Record<StreamSource, number>>({
-    cdc: 0,
-    scraper: 0,
-    reviews: 0,
-    social: 0,
-  });
-  const [paused, setPaused] = useState(false);
-  const pausedRef = useRef(paused);
-  pausedRef.current = paused;
-
-  useEffect(() => {
-    // each source ticks at its own cadence
-    const cadence: Record<StreamSource, number> = {
-      cdc: 1100,
-      scraper: 2600,
-      reviews: 1700,
-      social: 3200,
-    };
-    const timers = ALL_SOURCES.map((src) =>
-      window.setInterval(() => {
-        if (pausedRef.current) return;
-        const ev = makeEvent(src);
-        setEvents((prev) => [ev, ...prev].slice(0, 60));
-        setCounts((prev) => ({ ...prev, [src]: prev[src] + 1 }));
-      }, cadence[src])
-    );
-    return () => timers.forEach((t) => clearInterval(t));
-  }, []);
+  const events = useStreams((s) => s.events);
+  const counts = useStreams((s) => s.counts);
+  const paused = useStreams((s) => s.paused);
+  const togglePaused = useStreams((s) => s.togglePaused);
 
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
 
@@ -89,11 +57,11 @@ export function StreamsView() {
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs text-ink-300">unified_ingest.stream</span>
             <span className="rounded bg-cyan/10 px-2 py-0.5 font-mono text-[10px] text-cyan-glow">
-              {total} events · {total > 0 ? "live" : "starting…"}
+              {total.toLocaleString()} events · {paused ? "paused" : "live"}
             </span>
           </div>
           <button
-            onClick={() => setPaused((p) => !p)}
+            onClick={togglePaused}
             className="btn-ghost px-3 py-1.5 text-xs"
           >
             {paused ? "▶ Resume" : "⏸ Pause"}

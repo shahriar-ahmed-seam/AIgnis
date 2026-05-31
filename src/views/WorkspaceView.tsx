@@ -1,25 +1,14 @@
 import { motion } from "framer-motion";
 import { SectionHeader } from "./GraphView";
 import { useNav } from "../stores/navStore";
+import { useWorkspace } from "../stores/workspaceStore";
 
 /**
- * Brand Workspace — the persistent "home" that sells AInigma as a product, not
+ * Brand Workspace — the persistent "home" that sells AIgnis as a product, not
  * a one-shot tool: a brand profile, an AI "what I've learned" summary that
- * deepens over time, and a campaign history timeline.
+ * deepens over time, and a campaign history timeline that grows as you run
+ * campaigns (see workspaceStore — global + persisted).
  */
-const LEARNINGS = [
-  { conf: 94, text: "Your audience skews eco-conscious and under-25; they reward proof over claims." },
-  { conf: 88, text: "Best-performing tone is confident, not playful. Guilt-driven angles underperform by ~40%." },
-  { conf: 82, text: "TikTok consistently outperforms Instagram ~3:1 for your performance-led hooks." },
-  { conf: 76, text: "Scarcity framing ('first 500 pairs') lifts conversion; broad value props stall." },
-];
-
-const HISTORY = [
-  { date: "Day 1", name: "Terra Runner launch", result: "+38% CTR vs benchmark", status: "optimized", color: "#a3e635" },
-  { date: "Day 1", name: "Trail line teaser", result: "Strong saves, low installs", status: "live", color: "#22d3ee" },
-  { date: "Day 0", name: "Brand voice calibration", result: "Voice profile locked", status: "archived", color: "#6b748f" },
-];
-
 const BRAND = {
   name: "TERRA",
   tagline: "Sustainable performance footwear",
@@ -29,6 +18,9 @@ const BRAND = {
 
 export function WorkspaceView() {
   const setSection = useNav((s) => s.setSection);
+  const learnings = useWorkspace((s) => s.learnings);
+  const history = useWorkspace((s) => s.history);
+  const memoryDepth = useWorkspace((s) => s.memoryDepth);
 
   return (
     <div className="flex h-full flex-col px-8 py-6">
@@ -74,7 +66,7 @@ export function WorkspaceView() {
           <div className="panel p-5">
             <div className="label-mono mb-2">Memory depth</div>
             <div className="flex items-end gap-1">
-              <span className="font-display text-3xl font-bold text-ink-100">12</span>
+              <span className="font-display text-3xl font-bold text-ink-100">{memoryDepth}</span>
               <span className="mb-1 text-xs text-ink-500">signals learned</span>
             </div>
             <p className="mt-2 text-xs leading-relaxed text-ink-300">
@@ -92,7 +84,7 @@ export function WorkspaceView() {
               <span className="label-mono">confidence-ranked</span>
             </div>
             <div className="space-y-2.5">
-              {LEARNINGS.map((l, i) => (
+              {learnings.map((l, i) => (
                 <motion.div
                   key={l.text}
                   initial={{ opacity: 0, y: 8 }}
@@ -127,7 +119,7 @@ export function WorkspaceView() {
           <div className="panel flex-1 overflow-y-auto p-5">
             <div className="mb-3 text-sm font-bold text-ink-100">Campaign history</div>
             <div className="space-y-2">
-              {HISTORY.map((h, i) => (
+              {history.map((h, i) => (
                 <motion.div
                   key={h.name}
                   initial={{ opacity: 0, x: -8 }}

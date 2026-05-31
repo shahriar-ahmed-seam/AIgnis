@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useNav, type Section } from "../../stores/navStore";
-import { usePipeline } from "../../stores/pipelineStore";
 
 interface NavItem {
   id: Section;
@@ -28,7 +27,6 @@ const GROUPS = ["Create", "Intelligence", "Manage"];
  */
 export function Sidebar() {
   const { section, setSection } = useNav();
-  const reset = usePipeline((s) => s.reset);
 
   return (
     <aside className="flex w-[248px] shrink-0 flex-col border-r border-white/[0.06] bg-void-800/40 backdrop-blur-md">
@@ -42,10 +40,7 @@ export function Sidebar() {
                 return (
                   <button
                     key={item.id}
-                    onClick={() => {
-                      if (item.id === "studio") reset();
-                      setSection(item.id);
-                    }}
+                    onClick={() => setSection(item.id)}
                     className={`group relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
                       active ? "text-ink-100" : "text-ink-500 hover:text-ink-300"
                     }`}

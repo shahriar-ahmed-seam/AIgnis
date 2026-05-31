@@ -22,6 +22,10 @@ import { useNav } from "./stores/navStore";
 import { useAuth } from "./stores/authStore";
 import { useScreen } from "./stores/screenStore";
 import { useConnection } from "./stores/connectionStore";
+import { useStreams } from "./stores/streamsStore";
+import { useTelemetry } from "./stores/telemetryStore";
+import { useWorkspace } from "./stores/workspaceStore";
+import { useGraph } from "./stores/graphStore";
 import { primeAudio } from "./lib/sound";
 
 const variants = {
@@ -96,6 +100,16 @@ export default function App() {
   // Probe the backend once on load to pick Live vs Demo automatically.
   useEffect(() => {
     void useConnection.getState().init();
+  }, []);
+
+  // Boot the always-on background engines once, at app load — so the data
+  // streams, LLMOps telemetry and brand memory are already alive on arrival
+  // and never reset when switching tabs.
+  useEffect(() => {
+    useStreams.getState().start();
+    useTelemetry.getState().start();
+    useWorkspace.getState().start();
+    useGraph.getState().start();
   }, []);
 
   // Browser Back button on the auth screen returns to the landing page

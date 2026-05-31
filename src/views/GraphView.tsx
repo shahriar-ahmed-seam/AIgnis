@@ -7,19 +7,24 @@ import {
   type GraphNode,
 } from "../data/graphData";
 import { ModeIndicator } from "../components/ui/ModeIndicator";
+import { useGraph } from "../stores/graphStore";
 import { play } from "../lib/sound";
 
 /**
  * GraphRAG Knowledge Graph — the brand ontology as an interactive node graph.
- * Hovering/selecting a node highlights its relationships. This is the visual
- * embodiment of the Neo4j/GraphRAG pillar: brand rules, audiences, competitors,
- * channels and insights as a queryable knowledge structure.
+ * Selection persists globally (graphStore) and, when the user isn't hovering,
+ * an ambient "query" continuously traverses the graph — so it always looks
+ * like the agents are reasoning over it. Hovering takes over the highlight.
  */
 export function GraphView() {
-  const [selected, setSelected] = useState<string | null>("brand");
+  const selected = useGraph((s) => s.selected);
+  const setSelected = useGraph((s) => s.setSelected);
+  const autoQuery = useGraph((s) => s.autoQuery);
+  const setUserActive = useGraph((s) => s.setUserActive);
   const [hovered, setHovered] = useState<string | null>(null);
 
-  const focus = hovered ?? selected;
+  // hover wins; else the ambient auto-query; else the persisted selection.
+  const focus = hovered ?? autoQuery ?? selected;
   const neighbors = new Set<string>();
   if (focus) {
     neighbors.add(focus);
@@ -116,8 +121,14 @@ export function GraphView() {
                   transform={`translate(${n.x * W}, ${n.y * H})`}
                   className="cursor-pointer"
                   opacity={dimmed ? 0.3 : 1}
-                  onMouseEnter={() => setHovered(n.id)}
-                  onMouseLeave={() => setHovered(null)}
+                  onMouseEnter={() => {
+                    setHovered(n.id);
+                    setUserActive(true);
+                  }}
+                  onMouseLeave={() => {
+                    setHovered(null);
+                    setUserActive(false);
+                  }}
                   onClick={() => {
                     play("tick");
                     setSelected(n.id);

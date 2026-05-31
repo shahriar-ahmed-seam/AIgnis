@@ -12,6 +12,7 @@ import { resolveDataset } from "../data/datasets";
 import { play } from "../lib/sound";
 import { startRun as apiStartRun, streamRun, generateLiveCopy } from "../lib/api";
 import { useConnection } from "./connectionStore";
+import { useWorkspace } from "./workspaceStore";
 
 type View = "landing" | "activity" | "creative" | "video" | "pulse";
 
@@ -238,6 +239,7 @@ function runLocal(dataset: MockDataset, speed: number, set: SetState, get: GetSt
       progress: 1,
       activeAgent: null,
     });
+    useWorkspace.getState().recordCampaign(get().productIdea);
   }, lastTs / speed + 1200);
   timers.push(finish);
 
@@ -269,6 +271,7 @@ function runLive(idea: string, dataset: MockDataset, speed: number, set: SetStat
         onAsset: (asset) => {
           play("reveal");
           set({ state: "complete", view: "creative", asset, progress: 1, activeAgent: null });
+          useWorkspace.getState().recordCampaign(get().productIdea);
         },
         onError: () => fallback("stream"),
       });

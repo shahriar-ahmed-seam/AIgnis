@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Area,
@@ -11,12 +10,13 @@ import {
 } from "recharts";
 import { SectionHeader } from "./GraphView";
 import { CountUp } from "../components/ui/CountUp";
+import { useTelemetry } from "../stores/telemetryStore";
 
 /**
  * LLMOps Observability — makes the model layer feel like a real ML platform:
- * token/cost/latency KPIs (ticking live), a latency timeline, a semantic
- * model-router that classifies tasks to fast-local vs smart-cloud models, and
- * a cost-saving cache. This is the "semantic routing + observability" pillar.
+ * token/cost/latency KPIs that accumulate globally from app load (see
+ * telemetryStore), a latency timeline, a semantic model-router and a
+ * cost-saving cache. Numbers only climb — they never reset on tab switch.
  */
 const MODELS = [
   { id: "llama-3.1-8b", tier: "local", role: "extraction · parsing · routing", color: "#a3e635", cost: "$0.00", share: 64 },
@@ -32,24 +32,11 @@ const ROUTES = [
 ];
 
 export function ObservabilityView() {
-  const [tokens, setTokens] = useState(1_284_000);
-  const [cost, setCost] = useState(4.82);
-  const [latency, setLatency] = useState(412);
-  const [cacheHit, setCacheHit] = useState(41);
-  const [series, setSeries] = useState(() =>
-    Array.from({ length: 20 }, (_, i) => ({ t: i, ms: 380 + Math.random() * 120 }))
-  );
-
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setTokens((v) => v + Math.floor(Math.random() * 4000 + 800));
-      setCost((v) => +(v + Math.random() * 0.04).toFixed(2));
-      setLatency(() => Math.round(360 + Math.random() * 160));
-      setCacheHit(() => Math.round(38 + Math.random() * 10));
-      setSeries((prev) => [...prev.slice(1), { t: prev[prev.length - 1].t + 1, ms: 360 + Math.random() * 180 }]);
-    }, 1500);
-    return () => clearInterval(id);
-  }, []);
+  const tokens = useTelemetry((s) => s.tokens);
+  const cost = useTelemetry((s) => s.cost);
+  const latency = useTelemetry((s) => s.latency);
+  const cacheHit = useTelemetry((s) => s.cacheHit);
+  const series = useTelemetry((s) => s.series);
 
   return (
     <div className="flex h-full flex-col px-8 py-6">
