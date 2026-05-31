@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import type { ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Backdrop } from "./components/layout/Backdrop";
 import { AppShell } from "./components/layout/AppShell";
@@ -97,6 +98,18 @@ export default function App() {
     void useConnection.getState().init();
   }, []);
 
+  // Browser Back button on the auth screen returns to the landing page
+  // instead of leaving the site.
+  useEffect(() => {
+    const onPop = () => {
+      if (useScreen.getState().screen === "auth") {
+        useScreen.getState().goWelcome(true);
+      }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   // Public /docs route: anyone hitting {app}/docs sees the docs page directly
   // (its own access gate decides visibility). This is the judge/investor link.
   const isDocsPath =
@@ -113,25 +126,30 @@ export default function App() {
   }
 
   const authed = status === "authenticated";
-  const active = authed ? "app" : screen; // "welcome" | "auth" | "app"
+
+  // Render the active public/app screen directly. We deliberately avoid
+  // AnimatePresence "mode=wait" here: full-screen swaps that wait for an exit
+  // animation can stall mid-transition and leave a blank screen. Each screen
+  // animates its own content in, so a direct switch is both reliable and smooth.
+  let screenEl: ReactElement;
+  if (authed) screenEl = <PlatformApp />;
+  else if (screen === "auth") screenEl = <AuthView />;
+  else screenEl = <WelcomeView />;
+
+  const screenKey = authed ? "app" : screen;
 
   return (
     <>
       <Backdrop />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          variants={variants}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          transition={{ duration: 0.4 }}
-        >
-          {active === "welcome" && <WelcomeView />}
-          {active === "auth" && <AuthView />}
-          {active === "app" && <PlatformApp />}
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        key={screenKey}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.35 }}
+        className="relative z-10"
+      >
+        {screenEl}
+      </motion.div>
     </>
   );
 }

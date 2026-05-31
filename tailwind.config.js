@@ -75,6 +75,10 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "gradient-flow": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
         "spin-slow": {
           to: { transform: "rotate(360deg)" },
         },
@@ -83,6 +87,7 @@ export default {
         "pulse-line": "pulse-line 2.4s ease-in-out infinite",
         "float-slow": "float-slow 6s ease-in-out infinite",
         "shimmer": "shimmer 2.5s linear infinite",
+        "gradient-flow": "gradient-flow 4s ease infinite",
         "spin-slow": "spin-slow 18s linear infinite",
       },
     },

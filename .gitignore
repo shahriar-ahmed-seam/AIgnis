@@ -11,6 +11,9 @@ server/dist/
 server/.data/
 server/generated/
 
+# Reel originals (pre-compression backups)
+.reels-backup/
+
 # Environment & secrets
 .env
 .env.*
