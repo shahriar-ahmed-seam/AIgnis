@@ -71,12 +71,16 @@ function MemberCard({ member, delay }: { member: TeamMember; delay: number }) {
         </span>
       </div>
       <p className="mt-1.5 text-xs leading-relaxed text-ink-300">{member.role}</p>
-      <a
-        href={`mailto:${member.email}`}
-        className="mt-3 font-mono text-[11px] text-violet-glow hover:underline"
-      >
-        {member.email}
-      </a>
+      {member.email ? (
+        <a
+          href={`mailto:${member.email}`}
+          className="mt-3 font-mono text-[11px] text-violet-glow hover:underline"
+        >
+          {member.email}
+        </a>
+      ) : (
+        <span className="mt-3 font-mono text-[11px] text-ink-600">email coming soon</span>
+      )}
       <span className="mt-2 font-mono text-[10px] text-ink-500">{member.attendance}</span>
     </motion.div>
   );
