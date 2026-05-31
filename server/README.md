@@ -109,26 +109,34 @@ matching the LLMOps "semantic router" story in the frontend.
 
 ---
 
-## MCP Inventory Server
+## MCP Servers (5)
 
-`src/mcp/inventoryServer.ts` — built on `@modelcontextprotocol/sdk`, speaks MCP
-over **stdio**. Reads `data/inventory.json` and exposes:
+All built on `@modelcontextprotocol/sdk`, speaking MCP over **stdio**. Each
+wraps a real backend service so agents reach private/grounding data through the
+protocol. Verified via `src/mcp/testAllServers.ts` (boots each, lists tools/
+resources, calls tools).
 
-- **Resource** `inventory://all` — the full inventory document
-- **Tool** `query_inventory` — search by query / category / status
-- **Tool** `get_stock` — stock + price + margin for a SKU
-- **Tool** `low_stock` — items needing restock
+| Server | Run | Tools | Resource | Wraps |
+| --- | --- | --- | --- | --- |
+| `aignis-inventory` | `npm run mcp` | query_inventory · get_stock · low_stock | `inventory://all` | `data/inventory.json` |
+| `aignis-brand-guidelines` | `npm run mcp:brand` | list_brand_rules · check_compliance · get_relationships · traverse_graph | `brand://graph` | `services/graph.ts` (GraphRAG) |
+| `aignis-campaign-memory` | `npm run mcp:memory` | get_brand_profile · recall_learnings · list_campaigns · record_learning · record_campaign | `memory://workspace` | `services/workspace.ts` |
+| `aignis-market-intel` | `npm run mcp:market` | pull_signals · pull_reviews · trending_signals | `market://sources` | `services/streamSource.ts` |
+| `aignis-campaign-analytics` | `npm run mcp:analytics` | get_campaign_pulse · channel_summary · optimize_campaign | — | `services/pulse.ts` |
 
-Verified working via `src/mcp/testClient.ts` (lists tools/resources, calls
-tools, returns real records).
+Totals: **5 servers · 18 tools · 4 resources**, all stdio.
 
-To use it from an MCP client (e.g. Claude Desktop), point the client at:
+Use any of them from an MCP client (e.g. Claude Desktop):
 ```json
 {
   "mcpServers": {
-    "ainigma-inventory": {
+    "aignis-inventory": {
       "command": "npx",
       "args": ["tsx", "<abs-path>/server/src/mcp/inventoryServer.ts"]
+    },
+    "aignis-brand-guidelines": {
+      "command": "npx",
+      "args": ["tsx", "<abs-path>/server/src/mcp/brandGuidelinesServer.ts"]
     }
   }
 }

@@ -9,6 +9,10 @@
     "start": "node dist/index.js",
     "build": "tsc -p tsconfig.json",
     "mcp": "tsx src/mcp/inventoryServer.ts",
+    "mcp:brand": "tsx src/mcp/brandGuidelinesServer.ts",
+    "mcp:memory": "tsx src/mcp/campaignMemoryServer.ts",
+    "mcp:market": "tsx src/mcp/marketIntelServer.ts",
+    "mcp:analytics": "tsx src/mcp/analyticsServer.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
