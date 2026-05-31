@@ -36,18 +36,30 @@ export function Backdrop() {
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("focus", tryPlay);
 
-    // watchdog: if the video isn't advancing, nudge it back to life
+    // Watchdog: only nudge the video if it's genuinely paused/ended — NOT
+    // while it's buffering (readyState < HAVE_FUTURE_DATA). Calling play()
+    // during a buffer stall would interrupt loading and make stutter worse.
     let lastTime = 0;
+    let stalls = 0;
     const watchdog = window.setInterval(() => {
       if (document.visibilityState !== "visible") return;
       if (v.paused || v.ended) {
         tryPlay();
-      } else if (v.currentTime === lastTime) {
-        // frozen but not "paused" — reload the play head
-        tryPlay();
+        return;
+      }
+      const advancing = v.currentTime !== lastTime;
+      const buffering = v.readyState < 3; // HAVE_FUTURE_DATA
+      if (!advancing && !buffering) {
+        // truly frozen (not just waiting for data) — nudge after 2 misses
+        if (++stalls >= 2) {
+          tryPlay();
+          stalls = 0;
+        }
+      } else {
+        stalls = 0;
       }
       lastTime = v.currentTime;
-    }, 3000);
+    }, 4000);
 
     tryPlay();
 
@@ -101,7 +113,7 @@ export function Backdrop() {
         transition={{ duration: 1.2 }}
         className="absolute inset-0 h-full w-full object-cover"
       >
-        <source src="/video/ambient.mp4" type="video/mp4" />
+        <source src="/video/ambient-web.mp4" type="video/mp4" />
       </motion.video>
 
       {/* 4. dark scrim over the video so panels/text stay readable */}

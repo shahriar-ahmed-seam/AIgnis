@@ -98,7 +98,7 @@ const sneakers: MockDataset = {
     cta: "Claim Your First Pair",
   },
   heroImage: {
-    src: "/heroes/eco-sneakers.png",
+    src: "/heroes/eco-sneakers.webp",
     alt: "Floating eco-friendly sneaker on a misty pastel studio backdrop",
     fallbackGradient:
       "radial-gradient(120% 120% at 30% 20%, #134e4a 0%, #0f766e 30%, #052e2b 70%), linear-gradient(135deg, #22d3ee33, #a3e63522)",
@@ -293,7 +293,7 @@ const coldBrew: MockDataset = {
     cta: "Start Your Ritual",
   },
   heroImage: {
-    src: "/heroes/cold-brew.png",
+    src: "/heroes/cold-brew.webp",
     alt: "Frosted cold brew can with condensation on a dark moody backdrop",
     fallbackGradient:
       "radial-gradient(120% 120% at 70% 20%, #422006 0%, #1c1917 45%, #0c0a09 80%), linear-gradient(135deg, #f59e0b22, #8b5cf622)",
@@ -488,7 +488,7 @@ const fitnessApp: MockDataset = {
     cta: "Train Smarter Free",
   },
   heroImage: {
-    src: "/heroes/ai-fitness.png",
+    src: "/heroes/ai-fitness.webp",
     alt: "Athlete mid-motion with glowing data overlays on a dark gradient",
     fallbackGradient:
       "radial-gradient(120% 120% at 50% 10%, #1e1b4b 0%, #312e81 35%, #09090b 80%), linear-gradient(135deg, #8b5cf633, #22d3ee22)",
@@ -682,7 +682,7 @@ const defaultDataset: MockDataset = {
     cta: "Launch Campaign",
   },
   heroImage: {
-    src: "/heroes/default.png",
+    src: "/heroes/default.webp",
     alt: "Abstract premium product hero on a cyan-violet gradient",
     fallbackGradient:
       "radial-gradient(120% 120% at 50% 15%, #155e75 0%, #4c1d95 45%, #09090b 82%), linear-gradient(135deg, #22d3ee33, #e879f922)",
