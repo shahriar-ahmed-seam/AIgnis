@@ -31,15 +31,6 @@ const tagFilter = args.find((a) => !a.startsWith("--")); // e.g. "hero" | "perso
 // default) are 9:16 assets used by the campaign studio — they are intentionally
 // NOT in this manifest so this script never regenerates or overwrites them.
 const MANIFEST = [
-  // ---------- README brand banner (abstract, no text) ----------
-  {
-    tag: "brand",
-    out: "../docs/banner.webp",
-    w: 1456, h: 500, seed: 77,
-    prompt:
-      "Ultra-wide abstract tech banner, near-black void background, flowing ribbons of cyan, violet and magenta light, a subtle constellation of glowing connected network nodes, volumetric particles, deep cinematic depth, premium SaaS brand key art, dark moody, no text, no words, generous empty space in the center",
-  },
-
   // ---------- New landing hero scenarios only ----------
   {
     tag: "hero",

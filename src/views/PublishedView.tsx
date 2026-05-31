@@ -42,7 +42,7 @@ export function PublishedView() {
           </button>
         </div>
       ) : (
-        <div className="grid flex-1 auto-rows-min grid-cols-3 content-start gap-5 overflow-y-auto pb-2">
+        <div className="grid flex-1 auto-rows-min grid-cols-[repeat(auto-fill,minmax(200px,1fr))] content-start gap-5 overflow-y-auto pb-2">
           {posts.map((post, i) => (
             <motion.a
               key={post.id}
@@ -55,8 +55,8 @@ export function PublishedView() {
               transition={{ delay: i * 0.06 }}
               className="panel panel-hover group flex flex-col overflow-hidden"
             >
-              {/* preview */}
-              <div className="relative h-44 overflow-hidden">
+              {/* preview — 9:16 portrait, the format that was actually posted */}
+              <div className="relative aspect-[9/16] overflow-hidden">
                 <HeroImage image={post.hero} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                 <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur">
