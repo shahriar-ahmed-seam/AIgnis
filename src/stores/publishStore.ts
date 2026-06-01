@@ -5,6 +5,7 @@ import { toast } from "./toastStore";
 
 export interface PublishedPost {
   id: string;
+  campaignId: string;
   channel: ChannelId;
   headline: string;
   body: string;
@@ -54,8 +55,10 @@ export const usePublish = create<PublishStore>((set) => ({
   publishCampaign: ({ copy, hero, presetId, channels }) => {
     play("deploy");
     const now = Date.now();
+    const campaignId = `camp-${now}`;
     const fresh: PublishedPost[] = channels.map((channel, i) => ({
       id: `post-${pid++}`,
+      campaignId,
       channel,
       headline: copy.headline,
       body: copy.body,
