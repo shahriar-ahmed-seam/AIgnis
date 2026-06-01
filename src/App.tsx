@@ -19,6 +19,7 @@ import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
 import { CommandPalette } from "./components/layout/CommandPalette";
 import { Toaster } from "./components/ui/Toaster";
+import { BootSplash } from "./components/layout/BootSplash";
 import { usePipeline } from "./stores/pipelineStore";
 import { useNav } from "./stores/navStore";
 import { useAuth } from "./stores/authStore";
@@ -156,6 +157,7 @@ export default function App() {
 
   return (
     <>
+      <BootSplash />
       <Backdrop />
       <motion.div
         key={screenKey}
