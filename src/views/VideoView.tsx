@@ -5,7 +5,6 @@ import { usePublish } from "../stores/publishStore";
 import { useNav } from "../stores/navStore";
 import { VideoReel } from "../components/features/VideoReel";
 import { ChannelIcon } from "../components/ui/ChannelIcon";
-import { ModeIndicator } from "../components/ui/ModeIndicator";
 import { REEL_SPECS, type ChannelId } from "../types";
 import { speak, stopSpeaking, isSpeechOutputSupported } from "../lib/speech";
 import { play } from "../lib/sound";
@@ -65,7 +64,6 @@ export function VideoView() {
           <h2 className="font-display text-2xl font-bold text-ink-100">“{productIdea}”</h2>
         </div>
         <div className="flex items-center gap-3">
-          <ModeIndicator label="Simulated" />
           <button onClick={goToPulse} className="btn-ghost flex items-center gap-2">
             Skip to analytics →
           </button>
@@ -123,6 +121,17 @@ export function VideoView() {
 
         {/* publish panel */}
         <div className="flex flex-col gap-4 overflow-y-auto">
+          {/* modality progression — each output completing in sequence */}
+          <div className="panel p-5">
+            <div className="label-mono mb-3">Multimodal output</div>
+            <div className="space-y-2.5">
+              <ModalityRow glyph="✦" label="Copy" detail="headline · body · CTA" color="#f472b6" done />
+              <ModalityRow glyph="❖" label="Hero image" detail="diffusion render" color="#fb923c" done />
+              <ModalityRow glyph="▶" label="Video reels" detail="9:16 · 1:1 · 16:9" color="#22d3ee" done />
+              <ModalityRow glyph="◁" label="Voiceover" detail="AI narration ready" color="#a3e635" done />
+            </div>
+          </div>
+
           <div className="panel p-5">
             <div className="text-sm font-bold text-ink-100">Export & publish</div>
             <p className="mt-1.5 text-xs leading-relaxed text-ink-300">
@@ -187,6 +196,40 @@ export function VideoView() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ModalityRow({
+  glyph,
+  label,
+  detail,
+  color,
+  done,
+}: {
+  glyph: string;
+  label: string;
+  detail: string;
+  color: string;
+  done?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
+        style={{ color, background: `${color}14`, border: `1px solid ${color}33` }}
+      >
+        {glyph}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="text-sm font-medium text-ink-100">{label}</div>
+        <div className="font-mono text-[10px] text-ink-500">{detail}</div>
+      </div>
+      {done && (
+        <span className="flex items-center gap-1 font-mono text-[10px] text-lime">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-lime text-[9px] font-bold text-void-900">✓</span>
+        </span>
+      )}
     </div>
   );
 }
