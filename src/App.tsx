@@ -14,6 +14,7 @@ import { ObservabilityView } from "./views/ObservabilityView";
 import { WorkspaceView } from "./views/WorkspaceView";
 import { PublishedView } from "./views/PublishedView";
 import { PricingView } from "./views/PricingView";
+import { CommandCenterView } from "./views/CommandCenterView";
 import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
@@ -29,6 +30,7 @@ import { useStreams } from "./stores/streamsStore";
 import { useTelemetry } from "./stores/telemetryStore";
 import { useWorkspace } from "./stores/workspaceStore";
 import { useGraph } from "./stores/graphStore";
+import { useOwner } from "./stores/ownerStore";
 import { primeAudio } from "./lib/sound";
 
 const variants = {
@@ -77,6 +79,7 @@ function PlatformApp() {
           className="flex h-full flex-col"
         >
           {section === "studio" && <StudioSection />}
+          {section === "command" && <CommandCenterView />}
           {section === "graph" && <GraphView />}
           {section === "streams" && <StreamsView />}
           {section === "observability" && <ObservabilityView />}
@@ -113,6 +116,7 @@ export default function App() {
     useTelemetry.getState().start();
     useWorkspace.getState().start();
     useGraph.getState().start();
+    useOwner.getState().start();
   }, []);
 
   // Browser Back button on the auth screen returns to the landing page

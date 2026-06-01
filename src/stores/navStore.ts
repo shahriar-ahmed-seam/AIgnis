@@ -5,6 +5,7 @@ import { play } from "../lib/sound";
 // (landing → activity → creative → pulse); the rest are platform modules.
 export type Section =
   | "studio"
+  | "command"
   | "graph"
   | "streams"
   | "observability"
