@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { useNav, type Section } from "../../stores/navStore";
+import { useAuth } from "../../stores/authStore";
+import { useCampaigns, campaignsThisMonth, PLAN_LIMITS } from "../../stores/campaignStore";
 
 interface NavItem {
   id: Section;
@@ -29,6 +31,13 @@ const GROUPS = ["Create", "Intelligence", "Manage"];
  */
 export function Sidebar() {
   const { section, setSection } = useNav();
+  const plan = useAuth((s) => s.user?.plan ?? "Starter");
+  const campaigns = useCampaigns((s) => s.campaigns);
+  const used = campaignsThisMonth(campaigns);
+  const limit = PLAN_LIMITS[plan] ?? 5;
+  const unlimited = !isFinite(limit);
+  const pct = unlimited ? 0 : Math.min(100, (used / limit) * 100);
+  const atCap = !unlimited && used >= limit;
 
   return (
     <aside className="flex w-[248px] shrink-0 flex-col border-r border-white/[0.06] bg-void-800/40 backdrop-blur-md">
@@ -69,16 +78,44 @@ export function Sidebar() {
         ))}
       </div>
 
-      {/* footer status */}
+      {/* footer: plan + usage */}
       <div className="border-t border-white/[0.06] p-4">
         <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-lime shadow-[0_0_8px_#a3e635]" />
-            <span className="font-mono text-[11px] text-ink-300">All systems nominal</span>
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-lime shadow-[0_0_8px_#a3e635]" />
+              <span className="font-mono text-[11px] text-ink-300">{plan} plan</span>
+            </span>
+            {!unlimited && (
+              <span className="font-mono text-[10px] text-ink-500">
+                {used}/{limit}
+              </span>
+            )}
           </div>
-          <div className="mt-1.5 font-mono text-[10px] text-ink-500">
-            5 agents · 3 datastores · 2 models
-          </div>
+
+          {unlimited ? (
+            <div className="mt-2 font-mono text-[10px] text-ink-500">Unlimited campaigns · {used} this month</div>
+          ) : (
+            <>
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: atCap ? "linear-gradient(90deg,#fb923c,#e879f9)" : "linear-gradient(90deg,#22d3ee,#a78bfa)" }}
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.6 }}
+                />
+              </div>
+              <div className="mt-1.5 font-mono text-[10px] text-ink-500">
+                {atCap ? "Monthly limit reached" : `${limit - used} campaigns left this month`}
+              </div>
+              <button
+                onClick={() => setSection("pricing")}
+                className="mt-2.5 w-full rounded-lg bg-gradient-to-r from-cyan/15 to-violet/15 px-3 py-1.5 font-mono text-[11px] font-semibold text-violet-glow transition-colors hover:from-cyan/25 hover:to-violet/25"
+              >
+                ⬆ Upgrade to Pro
+              </button>
+            </>
+          )}
         </div>
       </div>
     </aside>

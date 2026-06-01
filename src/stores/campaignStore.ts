@@ -338,7 +338,6 @@ export const useCampaigns = create<CampaignStore>((set, get) => ({
   getById: (id) => get().campaigns.find((c) => c.id === id),
 
   sinceLastSeen: () => {
-    // synthetic but believable delta since last visit
     const since = get().lastSeen;
     const hrs = Math.max(0.5, (Date.now() - since) / HOUR);
     const active = get().campaigns.filter((c) => c.status === "active");
@@ -348,6 +347,22 @@ export const useCampaigns = create<CampaignStore>((set, get) => ({
     return { reach, conversions, topMover };
   },
 }));
+
+/** Campaigns created in the current calendar month (for plan usage meters). */
+export function campaignsThisMonth(campaigns: Campaign[]): number {
+  const now = new Date();
+  return campaigns.filter((c) => {
+    const d = new Date(c.createdAt);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).length;
+}
+
+/** Monthly campaign allowance per plan. */
+export const PLAN_LIMITS: Record<string, number> = {
+  Starter: 5,
+  Pro: Infinity,
+  Agency: Infinity,
+};
 
 /** Generate a believable "optimized" copy variant for the re-optimize action. */
 export function optimizeCopy(c: Campaign): { copy: MarketingCopy; note: string } {
