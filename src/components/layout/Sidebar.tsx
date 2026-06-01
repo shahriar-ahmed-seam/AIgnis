@@ -10,7 +10,7 @@ interface NavItem {
 
 const ITEMS: NavItem[] = [
   { id: "studio", label: "Campaign Studio", glyph: "✦", group: "Create" },
-  { id: "published", label: "Published", glyph: "📡", group: "Create" },
+  { id: "published", label: "Published", glyph: "↗", group: "Create" },
   { id: "graph", label: "Knowledge Graph", glyph: "◈", group: "Intelligence" },
   { id: "streams", label: "Live Data Streams", glyph: "≋", group: "Intelligence" },
   { id: "observability", label: "LLMOps", glyph: "◎", group: "Intelligence" },

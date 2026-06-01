@@ -31,7 +31,7 @@ export function PublishedView() {
 
       {posts.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <div className="mb-4 text-5xl opacity-40">📡</div>
+          <div className="mb-4 text-5xl text-ink-600">↗</div>
           <h3 className="font-display text-xl font-bold text-ink-100">Nothing published yet</h3>
           <p className="mt-2 max-w-sm text-sm text-ink-300">
             Forge a campaign in the Studio, then publish it to see your live posts here with

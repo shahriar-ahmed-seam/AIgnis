@@ -72,7 +72,7 @@ export const usePublish = create<PublishStore>((set) => ({
       tone: "success",
       title: `Published to ${channels.length} channel${channels.length > 1 ? "s" : ""}`,
       detail: "Your campaign is live. View it in Published.",
-      glyph: "📡",
+      glyph: "↗",
     });
   },
   clear: () => set({ posts: [] }),

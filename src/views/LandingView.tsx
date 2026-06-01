@@ -134,7 +134,13 @@ export function LandingView() {
                   transition={{ duration: 1.2, repeat: Infinity }}
                 />
               )}
-              <span className="relative z-10 text-lg">🎙</span>
+              <span className="relative z-10">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="9" y="2" width="6" height="12" rx="3" />
+                  <path d="M5 10a7 7 0 0 0 14 0" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+              </span>
             </button>
           )}
           <button onClick={() => launch(idea)} className="btn-primary group">

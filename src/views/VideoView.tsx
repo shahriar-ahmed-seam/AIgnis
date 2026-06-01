@@ -115,7 +115,7 @@ export function VideoView() {
                 onClick={doVoiceover}
                 className={`btn-ghost flex items-center gap-2 ${speaking ? "text-magenta" : ""}`}
               >
-                {speaking ? "■ Stop voiceover" : "🔊 Play AI voiceover"}
+                {speaking ? "■ Stop voiceover" : "◁ Play AI voiceover"}
               </button>
             )}
           </div>
@@ -146,7 +146,7 @@ export function VideoView() {
 
             {!published ? (
               <button onClick={doPublish} className="btn-primary mt-4 w-full">
-                📡 Publish to 3 channels
+                ↗ Publish to 3 channels
               </button>
             ) : (
               <motion.div

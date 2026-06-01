@@ -32,7 +32,7 @@ export function CreativeView() {
         </div>
         <div className="flex items-center gap-3">
           <button onClick={goToVideo} className="btn-primary flex items-center gap-2 text-sm">
-            <span>🎬</span> Make video reels
+            <span>❖</span> Make video reels
           </button>
           <button onClick={reset} className="btn-ghost flex items-center gap-2">
             <span>↻</span> Run another idea
