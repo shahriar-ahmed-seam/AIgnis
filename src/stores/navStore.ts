@@ -4,6 +4,7 @@ import { play } from "../lib/sound";
 // Top-level platform sections. "studio" hosts the campaign pipeline flow
 // (landing → activity → creative → pulse); the rest are platform modules.
 export type Section =
+  | "dashboard"
   | "studio"
   | "command"
   | "graph"
@@ -20,7 +21,7 @@ interface NavStore {
 }
 
 export const useNav = create<NavStore>((set) => ({
-  section: "studio",
+  section: "dashboard",
   setSection: (s) => {
     play("tick");
     set({ section: s });

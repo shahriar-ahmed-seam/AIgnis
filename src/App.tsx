@@ -15,6 +15,7 @@ import { WorkspaceView } from "./views/WorkspaceView";
 import { PublishedView } from "./views/PublishedView";
 import { PricingView } from "./views/PricingView";
 import { CommandCenterView } from "./views/CommandCenterView";
+import { DashboardView } from "./views/DashboardView";
 import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
@@ -80,6 +81,7 @@ function PlatformApp() {
           className="flex h-full flex-col"
         >
           {section === "studio" && <StudioSection />}
+          {section === "dashboard" && <DashboardView />}
           {section === "command" && <CommandCenterView />}
           {section === "graph" && <GraphView />}
           {section === "streams" && <StreamsView />}

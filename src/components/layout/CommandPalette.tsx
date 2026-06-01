@@ -70,6 +70,7 @@ export function CommandPalette() {
 
   const commands = useMemo<Command[]>(() => {
     const nav: Array<[Section, string, string]> = [
+      ["dashboard", "Dashboard", "⊞"],
       ["studio", "Campaign Studio", "✦"],
       ["command", "Command Center", "◷"],
       ["published", "Published", "↗"],

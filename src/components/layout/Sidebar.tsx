@@ -9,6 +9,7 @@ interface NavItem {
 }
 
 const ITEMS: NavItem[] = [
+  { id: "dashboard", label: "Dashboard", glyph: "⊞", group: "Create" },
   { id: "studio", label: "Campaign Studio", glyph: "✦", group: "Create" },
   { id: "command", label: "Command Center", glyph: "◷", group: "Create" },
   { id: "published", label: "Published", glyph: "↗", group: "Create" },
