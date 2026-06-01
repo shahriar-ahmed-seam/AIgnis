@@ -6,6 +6,7 @@ import { SoundToggle } from "./SoundToggle";
 import { ConnectionToggle } from "./ConnectionToggle";
 import { Sidebar } from "./Sidebar";
 import { UserMenu } from "./UserMenu";
+import { NotificationBell } from "./NotificationBell";
 import { usePipeline } from "../../stores/pipelineStore";
 import { useCommand } from "../../stores/commandStore";
 
@@ -34,6 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <ConnectionToggle />
           <EngineButton statuses={pillarStatuses} onClick={() => setDrawerOpen(true)} />
           <SoundToggle />
+          <NotificationBell />
           <UserMenu />
         </div>
       </header>
