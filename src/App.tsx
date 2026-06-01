@@ -31,6 +31,7 @@ import { useTelemetry } from "./stores/telemetryStore";
 import { useWorkspace } from "./stores/workspaceStore";
 import { useGraph } from "./stores/graphStore";
 import { useOwner } from "./stores/ownerStore";
+import { useCampaigns } from "./stores/campaignStore";
 import { primeAudio } from "./lib/sound";
 
 const variants = {
@@ -117,6 +118,7 @@ export default function App() {
     useWorkspace.getState().start();
     useGraph.getState().start();
     useOwner.getState().start();
+    useCampaigns.getState().start();
   }, []);
 
   // Browser Back button on the auth screen returns to the landing page
