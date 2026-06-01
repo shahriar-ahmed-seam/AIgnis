@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePipeline } from "../stores/pipelineStore";
 import { usePublish } from "../stores/publishStore";
+import { useCampaigns } from "../stores/campaignStore";
 import { useNav } from "../stores/navStore";
 import { VideoReel } from "../components/features/VideoReel";
 import { ChannelIcon } from "../components/ui/ChannelIcon";
@@ -17,6 +18,7 @@ import { play } from "../lib/sound";
 export function VideoView() {
   const { asset, dataset, productIdea, goToPulse } = usePipeline();
   const publishCampaign = usePublish((s) => s.publishCampaign);
+  const saveCampaign = useCampaigns((s) => s.saveCampaign);
   const setSection = useNav((s) => s.setSection);
 
   const [specIdx, setSpecIdx] = useState(0);
@@ -52,6 +54,17 @@ export function VideoView() {
       hero: asset.hero,
       presetId: dataset!.presetId,
       channels,
+    });
+    // also save it as an owned campaign in the portfolio (Dashboard/Command Center)
+    saveCampaign({
+      idea: productIdea,
+      presetId: dataset!.presetId,
+      name: shortName(productIdea, asset.copy.headline),
+      copy: asset.copy,
+      hero: asset.hero,
+      reelVideo: dataset!.reelVideo,
+      channels,
+      status: "active",
     });
     setPublished(true);
   }
@@ -198,6 +211,14 @@ export function VideoView() {
       </div>
     </div>
   );
+}
+
+/** A short campaign name from the idea (fallback to the headline). */
+function shortName(idea: string, headline: string): string {
+  const base = (idea || headline || "New campaign").trim();
+  const words = base.split(/\s+/).slice(0, 4).join(" ");
+  const s = words.length > 38 ? words.slice(0, 38) + "…" : words;
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function ModalityRow({
