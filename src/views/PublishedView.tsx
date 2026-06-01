@@ -1,12 +1,11 @@
-import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeader } from "./GraphView";
 import { usePublish, channelHandle, type PublishedPost } from "../stores/publishStore";
 import { useNav } from "../stores/navStore";
 import { ChannelIcon } from "../components/ui/ChannelIcon";
 import { HeroImage } from "../components/features/HeroImage";
 import { CountUp } from "../components/ui/CountUp";
-import { staggerContainer, staggerItem } from "../lib/motion";
 import { play } from "../lib/sound";
 
 const CHANNEL_NAME: Record<string, string> = {
@@ -86,16 +85,7 @@ export function PublishedView() {
           </button>
         </div>
       ) : (
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-          className="grid flex-1 auto-rows-min grid-cols-1 content-start gap-5 overflow-y-auto pb-2 md:grid-cols-2 xl:grid-cols-3"
-        >
-          {campaigns.map((c) => (
-            <CampaignCard key={c.campaignId} campaign={c} />
-          ))}
-        </motion.div>
+        <CampaignCarousel campaigns={campaigns} />
       )}
 
       <p className="mt-4 flex items-center gap-2 font-mono text-[10px] leading-relaxed text-ink-600">
@@ -106,14 +96,131 @@ export function PublishedView() {
   );
 }
 
-function CampaignCard({ campaign }: { campaign: Campaign }) {
+/* ---------------------------------------------------------------- */
+/* Auto-sliding 3-up carousel. Advances right→left and loops; any    */
+/* click/hover pauses it for a while so the user can read/click,     */
+/* then it resumes on its own.                                       */
+/* ---------------------------------------------------------------- */
+function CampaignCarousel({ campaigns }: { campaigns: Campaign[] }) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const resumeTimer = useRef<number>();
+  const n = campaigns.length;
+
+  // how many cards are visible (responsive); window of `perView`
+  const [perView, setPerView] = useState(3);
+  useEffect(() => {
+    const calc = () => {
+      const w = window.innerWidth;
+      setPerView(w < 900 ? 1 : w < 1280 ? 2 : 3);
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  // auto-advance one card at a time
+  useEffect(() => {
+    if (paused || n <= perView) return;
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % n), 3200);
+    return () => window.clearInterval(id);
+  }, [paused, n, perView]);
+
+  // pause helper — pauses, then schedules a resume
+  const pauseAwhile = (ms = 7000) => {
+    setPaused(true);
+    window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => setPaused(false), ms);
+  };
+  useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
+
+  const go = (dir: number) => {
+    setIndex((i) => (i + dir + n) % n);
+    pauseAwhile();
+  };
+
+  // build the visible window (wraps around) as a render list
+  const windowCards = Array.from({ length: Math.min(perView, n) }, (_, k) => {
+    const c = campaigns[(index + k) % n];
+    return c;
+  });
+
+  const cardBasis = perView === 1 ? "100%" : perView === 2 ? "calc(50% - 10px)" : "calc(33.333% - 14px)";
+
+  return (
+    <div
+      className="relative flex-1"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* arrows */}
+      {n > perView && (
+        <>
+          <button
+            onClick={() => { play("tick"); go(-1); }}
+            aria-label="Previous"
+            className="absolute -left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-void-800/70 text-ink-200 backdrop-blur-md transition-colors hover:border-white/30 hover:text-ink-100"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => { play("tick"); go(1); }}
+            aria-label="Next"
+            className="absolute -right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-void-800/70 text-ink-200 backdrop-blur-md transition-colors hover:border-white/30 hover:text-ink-100"
+          >
+            ›
+          </button>
+        </>
+      )}
+
+      {/* sliding window */}
+      <div className="flex gap-5 overflow-hidden pb-2 pt-1">
+        <AnimatePresence initial={false} mode="popLayout">
+          {windowCards.map((c) => (
+            <motion.div
+              key={c.campaignId}
+              layout
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ type: "spring", stiffness: 260, damping: 30 }}
+              style={{ flex: `0 0 ${cardBasis}` }}
+            >
+              <CampaignCard campaign={c} onInteract={() => pauseAwhile()} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* progress dots */}
+      {n > perView && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {campaigns.map((_, i) => {
+            const isActive = i === index;
+            return (
+              <button
+                key={i}
+                aria-label={`Go to campaign ${i + 1}`}
+                onClick={() => { setIndex(i); pauseAwhile(); play("tick"); }}
+                className="h-1.5 rounded-full transition-all duration-300"
+                style={{
+                  width: isActive ? 24 : 8,
+                  background: isActive ? "linear-gradient(90deg,#22d3ee,#a78bfa)" : "rgba(255,255,255,0.2)",
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CampaignCard({ campaign, onInteract }: { campaign: Campaign; onInteract?: () => void }) {
   const primary = campaign.posts[0];
 
   return (
-    <motion.div
-      variants={staggerItem}
-      className="panel group flex flex-col overflow-hidden"
-    >
+    <div className="panel group flex h-full flex-col overflow-hidden">
       {/* creative — shown once, 16:10 letterbox so cards stay compact & uniform */}
       <div className="relative aspect-[16/10] overflow-hidden">
         <HeroImage image={campaign.hero} />
@@ -172,7 +279,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
               href={p.url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => play("tick")}
+              onClick={() => { play("tick"); onInteract?.(); }}
               className="flex items-center gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.03]"
             >
               <ChannelIcon id={p.channel} size={20} />
@@ -200,7 +307,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
