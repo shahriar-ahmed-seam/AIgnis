@@ -18,6 +18,7 @@ import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
 import { CommandPalette } from "./components/layout/CommandPalette";
+import { Toaster } from "./components/ui/Toaster";
 import { usePipeline } from "./stores/pipelineStore";
 import { useNav } from "./stores/navStore";
 import { useAuth } from "./stores/authStore";
@@ -166,6 +167,7 @@ export default function App() {
         {screenEl}
       </motion.div>
       {authed && <CommandPalette />}
+      <Toaster />
     </>
   );
 }

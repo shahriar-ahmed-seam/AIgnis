@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { ChannelId, ImageRef, MarketingCopy } from "../types";
 import { play } from "../lib/sound";
+import { toast } from "./toastStore";
 
 export interface PublishedPost {
   id: string;
@@ -67,6 +68,12 @@ export const usePublish = create<PublishStore>((set) => ({
       likes: Math.floor(Math.random() * 4000 + 400),
     }));
     set((s) => ({ posts: [...fresh, ...s.posts] }));
+    toast({
+      tone: "success",
+      title: `Published to ${channels.length} channel${channels.length > 1 ? "s" : ""}`,
+      detail: "Your campaign is live. View it in Published.",
+      glyph: "📡",
+    });
   },
   clear: () => set({ posts: [] }),
 }));

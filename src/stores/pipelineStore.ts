@@ -13,6 +13,7 @@ import { play } from "../lib/sound";
 import { startRun as apiStartRun, streamRun, generateLiveCopy } from "../lib/api";
 import { useConnection } from "./connectionStore";
 import { useWorkspace } from "./workspaceStore";
+import { toast } from "./toastStore";
 
 type View = "landing" | "activity" | "creative" | "video" | "pulse";
 
@@ -154,6 +155,12 @@ export const usePipeline = create<PipelineStore>((set, get) => ({
     const t = window.setTimeout(() => {
       play("success");
       set({ optimizing: false, optimized: true });
+      toast({
+        tone: "success",
+        title: "Campaign optimized",
+        detail: "The swarm rewrote the weak spots — metrics climbed.",
+        glyph: "⚡",
+      });
     }, 2600);
     set({ _timers: [...get()._timers, t] });
   },
