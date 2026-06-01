@@ -29,6 +29,7 @@ export function DashboardView() {
   const activity = useCampaigns((s) => s.activity);
   const sinceLastSeen = useCampaigns((s) => s.sinceLastSeen);
   const markSeen = useCampaigns((s) => s.markSeen);
+  const openCampaign = useCampaigns((s) => s.open);
   const setSection = useNav((s) => s.setSection);
 
   // compute the "while you were away" delta once on mount, then mark seen
@@ -77,7 +78,7 @@ export function DashboardView() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
           {/* left: top mover + portfolio snapshot */}
           <div className="space-y-6">
-            {away.topMover && <TopMover campaign={away.topMover} onOpen={() => setSection("command")} />}
+            {away.topMover && <TopMover campaign={away.topMover} onOpen={() => openCampaign(away.topMover!.id)} />}
 
             <div>
               <div className="mb-3 flex items-center justify-between">
@@ -91,7 +92,7 @@ export function DashboardView() {
               </div>
               <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-2.5">
                 {campaigns.map((c) => (
-                  <PortfolioRow key={c.id} campaign={c} onOpen={() => setSection("command")} />
+                  <PortfolioRow key={c.id} campaign={c} onOpen={() => openCampaign(c.id)} />
                 ))}
               </motion.div>
             </div>

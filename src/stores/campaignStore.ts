@@ -57,8 +57,12 @@ interface CampaignStore {
   activity: ActivityEntry[];
   lastSeen: number;
   started: boolean;
+  /** the campaign currently open in the detail page (null = list/dashboard) */
+  selectedId: string | null;
 
   start: () => void;
+  open: (id: string) => void;
+  closeDetail: () => void;
   /** Create + save a campaign from a finished run. Returns its id. */
   saveCampaign: (input: {
     idea: string;
@@ -231,6 +235,7 @@ export const useCampaigns = create<CampaignStore>((set, get) => ({
   activity: persisted?.activity ?? seedActivity(),
   lastSeen: loadSeen(),
   started: false,
+  selectedId: null,
   _timer: undefined,
 
   start: () => {
@@ -260,6 +265,9 @@ export const useCampaigns = create<CampaignStore>((set, get) => ({
     }, 3000);
     set({ started: true, _timer: id });
   },
+
+  open: (id) => set({ selectedId: id }),
+  closeDetail: () => set({ selectedId: null }),
 
   saveCampaign: (input) => {
     const now = Date.now();
@@ -340,3 +348,24 @@ export const useCampaigns = create<CampaignStore>((set, get) => ({
     return { reach, conversions, topMover };
   },
 }));
+
+/** Generate a believable "optimized" copy variant for the re-optimize action. */
+export function optimizeCopy(c: Campaign): { copy: MarketingCopy; note: string } {
+  const notes = [
+    "Rewrote the hook performance-first after a CTR dip.",
+    "Tightened the CTA and led with the strongest proof point.",
+    "Shifted tone to match the top-performing audience segment.",
+    "Trimmed the body for punchier, scroll-stopping copy.",
+  ];
+  const headline = /now\.?$/i.test(c.copy.headline)
+    ? c.copy.headline
+    : c.copy.headline.replace(/\.$/, "") + ". Now.";
+  return {
+    copy: {
+      headline,
+      body: c.copy.body,
+      cta: c.copy.cta.length > 14 ? "Get Started" : c.copy.cta,
+    },
+    note: notes[Math.floor(Math.random() * notes.length)],
+  };
+}

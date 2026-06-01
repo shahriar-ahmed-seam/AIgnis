@@ -16,6 +16,7 @@ import { PublishedView } from "./views/PublishedView";
 import { PricingView } from "./views/PricingView";
 import { CommandCenterView } from "./views/CommandCenterView";
 import { DashboardView } from "./views/DashboardView";
+import { CampaignDetailView } from "./views/CampaignDetailView";
 import { DocsView } from "./views/DocsView";
 import { WelcomeView } from "./views/WelcomeView";
 import { AuthView } from "./views/AuthView";
@@ -40,6 +41,14 @@ const variants = {
   enter: { opacity: 1, y: 0, filter: "blur(0px)" },
   exit: { opacity: 0, y: -16, filter: "blur(6px)" },
 };
+
+/** Dashboard section — shows the campaign detail page when one is selected. */
+function DashboardSection() {
+  const selectedId = useCampaigns((s) => s.selectedId);
+  const campaign = useCampaigns((s) => (selectedId ? s.campaigns.find((c) => c.id === selectedId) : undefined));
+  if (selectedId && campaign) return <CampaignDetailView campaign={campaign} />;
+  return <DashboardView />;
+}
 
 /** The Campaign Studio section hosts the linear pipeline flow. */
 function StudioSection() {
@@ -81,7 +90,7 @@ function PlatformApp() {
           className="flex h-full flex-col"
         >
           {section === "studio" && <StudioSection />}
-          {section === "dashboard" && <DashboardView />}
+          {section === "dashboard" && <DashboardSection />}
           {section === "command" && <CommandCenterView />}
           {section === "graph" && <GraphView />}
           {section === "streams" && <StreamsView />}
